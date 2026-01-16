@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Automatic Report Generator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .container {
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 100%;
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 25px;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-weight: 600;
+      }
+      select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+      }
+      select:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+      button {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      button:hover {
+        transform: translateY(-2px);
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .message {
+        margin-top: 20px;
+        padding: 12px;
+        border-radius: 5px;
+        text-align: center;
+        display: none;
+      }
+      .message.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .message.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📊 Report Generator</h1>
+      <form id="reportForm">
+        <div class="form-group">
+          <label for="reportType">Report Type:</label>
+          <select id="reportType" required>
+            <option value="">-- Select Report Type --</option>
+            <option value="profile">Profile Report</option>
+            <option value="growth">Growth Report</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="experience">Experience:</label>
+          <select id="experience" required>
+            <option value="">-- Select Experience --</option>
+          </select>
+        </div>
+
+        <button type="submit" id="generateBtn">Generate Report</button>
+      </form>
+
+      <div id="message" class="message"></div>
+    </div>
+
+    <script>
+      const experienceSelect = document.getElementById("experience");
+      const reportForm = document.getElementById("reportForm");
+      const generateBtn = document.getElementById("generateBtn");
+      const messageDiv = document.getElementById("message");
+
+      // Load experiences on page load
+      async function loadExperiences() {
+        try {
+          const response = await fetch("/api/experiences");
+          const data = await response.json();
+
+          data.experiences.forEach((exp) => {
+            const option = document.createElement("option");
+            option.value = exp;
+            option.textContent = exp;
+            experienceSelect.appendChild(option);
+          });
+        } catch (error) {
+          showMessage("Failed to load experiences", "error");
+        }
+      }
+
+      // Handle form submission
+      reportForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const reportType = document.getElementById("reportType").value;
+        const experience = document.getElementById("experience").value;
+
+        if (!reportType || !experience) {
+          showMessage("Please select both report type and experience", "error");
+          return;
+        }
+
+        generateBtn.disabled = true;
+        generateBtn.textContent = "Generating...";
+        hideMessage();
+
+        try {
+          const response = await fetch("/api/generate-report", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ reportType, experience }),
+          });
+
+          if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${reportType}_${experience}_report.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+
+            showMessage("Report generated successfully!", "success");
+          } else {
+            const error = await response.json();
+            showMessage(error.error || "Failed to generate report", "error");
+          }
+        } catch (error) {
+          showMessage("Network error. Please try again.", "error");
+        } finally {
+          generateBtn.disabled = false;
+          generateBtn.textContent = "Generate Report";
+        }
+      });
+
+      function showMessage(text, type) {
+        messageDiv.textContent = text;
+        messageDiv.className = `message ${type}`;
+        messageDiv.style.display = "block";
+      }
+
+      function hideMessage() {
+        messageDiv.style.display = "none";
+      }
+
+      // Load experiences on page load
+      loadExperiences();
+    </script>
+  </body>
+</html>
