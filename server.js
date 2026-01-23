@@ -563,8 +563,8 @@ handlebars.registerHelper("gt", function (a, b) {
   return a > b;
 });
 
-handlebars.registerHelper("eq", function (a, b) {
-  return a === b;
+handlebars.registerHelper("multiply", function (a, b) {
+  return a * b;
 });
 
 app.listen(PORT, () => {

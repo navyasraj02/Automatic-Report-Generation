@@ -1,169 +1,669 @@
-<!-- filepath: f:\Automatic report generation\templates\growth_report.hbs -->
+{{! filepath: f:\Automatic report generation\templates\growth_report.hbs }}
+<!-- COMPLETE GROWTH REPORT TEMPLATE -->
 
 <html>
   <head>
     <meta charset="UTF-8" />
     <style>
-      @import
-      url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap');
-      * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family:
-      'Inter', Arial, sans-serif; color: #fff; background: #000; } .slide {
-      width: 297mm; height: 210mm; padding: 0; margin: 0; page-break-after:
-      always; position: relative; overflow: hidden; background: #000; } /*
-      Decorative circles */ .circle { position: absolute; border-radius: 50%;
-      background: #C8102E; opacity: 0.9; } .circle-top-left { width: 280px;
-      height: 280px; top: -140px; left: -140px; } .circle-top-right { width:
-      120px; height: 120px; top: 60px; right: 50px; } .circle-middle-left {
-      width: 60px; height: 60px; top: 55%; left: 30px; } .circle-bottom-right {
-      width: 350px; height: 350px; bottom: -175px; right: -100px; }
-      .circle-middle-right { width: 180px; height: 180px; top: 40%; right:
-      -50px; } .circle-small { width: 90px; height: 90px; top: 80px; left:
-      180px; } .circle-bottom-left { width: 200px; height: 200px; bottom:
-      -100px; left: -50px; } /* Cover Slide */ .cover-slide { display: flex;
-      flex-direction: column; justify-content: center; align-items: flex-start;
-      padding: 80px 100px; } .logo-container { position: absolute; top: 60px;
-      left: 50%; transform: translateX(-50%); z-index: 10; } .logo { width:
-      280px; height: auto; display: block; } .badge { background: #C8102E;
-      color: #fff; padding: 12px 45px; border-radius: 50px; font-size: 20px;
-      font-weight: 700; display: inline-block; margin-bottom: 50px; margin-top:
-      200px; z-index: 10; position: relative; } .title { font-family: 'Bebas
-      Neue', Arial, sans-serif; font-size: 90px; font-weight: 400; color:
-      #C8102E; line-height: 1.1; margin-bottom: 60px; text-transform: uppercase;
-      letter-spacing: 2px; z-index: 10; position: relative; } .subtitle {
-      font-size: 36px; font-weight: 400; margin-bottom: 15px; color: #fff;
-      z-index: 10; position: relative; } .instructor { font-size: 32px;
-      font-weight: 400; color: #ccc; z-index: 10; position: relative; } /*
-      Participation Slide */ .participation-slide { padding: 60px 80px; }
-      .slide-header { margin-bottom: 40px; z-index: 10; position: relative; }
-      .slide-title { font-family: 'Bebas Neue', Arial, sans-serif; font-size:
-      64px; font-weight: 400; color: #C8102E; margin-bottom: 10px;
-      letter-spacing: 1px; } .content-grid { display: grid;
-      grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch; z-index:
-      10; position: relative; } /* Dual Bar Chart with Y-axis */
-      .dual-bar-chart-with-axis { background: rgba(26, 26, 26, 0.95);
-      border-radius: 20px; padding: 40px; border: 2px solid #333; display: flex;
-      gap: 20px; } .y-axis { display: flex; flex-direction: column;
-      justify-content: space-between; padding-right: 15px; border-right: 2px
-      solid #444; height: 240px; padding-top: 5px; padding-bottom: 25px; }
-      .y-axis span { font-size: 14px; color: #999; font-weight: 600; }
-      .chart-area { flex: 1; display: flex; flex-direction: column; }
-      .dual-bar-wrapper { position: relative; height: 280px; display: flex;
-      align-items: flex-end; justify-content: center; gap: 60px; margin-bottom:
-      10px; } .bar { width: 120px; background: linear-gradient(180deg, #C8102E
-      0%, #8B0A1F 100%); border-radius: 12px 12px 0 0; position: relative;
-      box-shadow: 0 -8px 25px rgba(200, 16, 46, 0.4); } .bar-label { position:
-      absolute; top: -45px; width: 100%; text-align: center; font-family: 'Bebas
-      Neue', Arial, sans-serif; font-size: 48px; font-weight: 400; color: #fff;
-      letter-spacing: 1px; } .bar-base { text-align: center; font-size: 14px;
-      color: #999; font-weight: 400; text-transform: uppercase; letter-spacing:
-      1px; margin-top: 10px; } .chart-labels { display: flex; justify-content:
-      center; gap: 60px; } /* Stats Container */ .stats-container { background:
-      rgba(26, 26, 26, 0.95); border-radius: 20px; padding: 50px; border: 2px
-      solid #333; display: flex; flex-direction: column; justify-content:
-      center; } .stat-card { margin-bottom: 40px; } .stat-card:last-child {
-      margin-bottom: 0; } .stat-label { font-size: 14px; color: #999;
-      margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px;
-      font-weight: 400; } .stat-value { font-family: 'Bebas Neue', Arial,
-      sans-serif; font-size: 72px; font-weight: 400; color: #C8102E;
-      margin-bottom: 12px; line-height: 1; letter-spacing: 1px; }
-      .stat-description { font-size: 16px; color: #ccc; line-height: 1.5;
-      font-weight: 400; } .divider { height: 2px; background:
-      linear-gradient(90deg, #C8102E 0%, transparent 100%); margin: 40px 0; } /*
-      Student Growth Slide */ .growth-slide { padding: 60px 80px; }
-      .growth-content { display: grid; grid-template-columns: 380px 1fr; gap:
-      35px; z-index: 10; position: relative; } .growth-description { background:
-      rgba(26, 26, 26, 0.95); border-radius: 20px; padding: 35px; border: 2px
-      solid #333; display: flex; flex-direction: column; justify-content:
-      center; } .growth-text { font-size: 14px; color: #ccc; line-height: 1.7;
-      margin-bottom: 20px; } .growth-scale { margin-top: 20px; }
-      .growth-scale-title { font-size: 15px; color: #fff; font-weight: 600;
-      margin-bottom: 12px; } .growth-scale-item { font-size: 13px; color: #ccc;
-      margin-bottom: 7px; padding-left: 15px; position: relative; }
-      .growth-scale-item:before { content: '•'; position: absolute; left: 0;
-      color: #C8102E; font-size: 18px; } .growth-charts { display: grid;
-      grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap:
-      12px; } .mini-chart { background: rgba(26, 26, 26, 0.95); border-radius:
-      15px; padding: 18px; border: 2px solid #333; display: flex;
-      flex-direction: column; } .mini-chart-title { font-size: 12px; color:
-      #fff; font-weight: 600; margin-bottom: 8px; text-align: center;
-      line-height: 1.3; } .mini-bars-wrapper { display: flex; align-items:
-      flex-end; justify-content: center; gap: 10px; height: 95px; flex: 1; }
-      .mini-bar-group { display: flex; flex-direction: column; align-items:
-      center; flex: 1; max-width: 50px; } .mini-bars { display: flex; gap: 3px;
-      align-items: flex-end; height: 70px; } .mini-bar-expected { width: 10px;
-      background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
-      border-radius: 4px 4px 0 0; position: relative; } .mini-bar-achieved {
-      width: 10px; background: linear-gradient(180deg, #00CED1 0%, #008B8B
-      100%); border-radius: 4px 4px 0 0; position: relative; }
-      .mini-bar-category { font-size: 8px; color: #999; margin-top: 4px;
-      text-align: center; } .mini-chart-legend { display: flex; justify-content:
-      center; gap: 12px; margin-top: 6px; } .legend-item { display: flex;
-      align-items: center; gap: 4px; font-size: 9px; color: #ccc; }
-      .legend-color { width: 10px; height: 7px; border-radius: 2px; }
-      .legend-expected { background: linear-gradient(180deg, #FFD700 0%, #FFA500
-      100%); } .legend-achieved { background: linear-gradient(180deg, #00CED1
-      0%, #008B8B 100%); } /* Progress/Connection Slide */ .progress-slide {
-      padding: 60px 80px; } .progress-content { display: grid;
-      grid-template-columns: 450px 1fr; gap: 50px; z-index: 10; position:
-      relative; } .progress-description { background: rgba(26, 26, 26, 0.95);
-      border-radius: 20px; padding: 40px; border: 2px solid #333; display: flex;
-      flex-direction: column; justify-content: center; }
-      .progress-chart-container { background: rgba(26, 26, 26, 0.95);
-      border-radius: 20px; padding: 40px; border: 2px solid #333; display: flex;
-      align-items: center; justify-content: center; } /* Chart with Y-axis for
-      slides 4-7 */ .chart-with-axis { display: flex; gap: 20px; width: 100%;
-      height: 100%; } /* Stacked Bars (3 bars - slides 4, 5) */ .stacked-bars {
-      display: flex; align-items: flex-end; justify-content: center; gap: 40px;
-      height: 240px; flex: 1; padding-top: 50px; } .stacked-bar-group { display:
-      flex; flex-direction: column; align-items: center; } .stacked-bar { width:
-      100px; background: linear-gradient(180deg, #C8102E 0%, #8B0A1F 100%);
-      border-radius: 12px 12px 0 0; position: relative; box-shadow: 0 -8px 25px
-      rgba(200, 16, 46, 0.4); min-height: 5px; } .stacked-bar-label { position:
-      absolute; top: -45px; left: 50%; transform: translateX(-50%); font-family:
-      'Bebas Neue', Arial, sans-serif; font-size: 32px; font-weight: 400; color:
-      #fff; white-space: nowrap; } .stacked-bar-category { font-size: 14px;
-      color: #999; margin-top: 10px; text-transform: uppercase; letter-spacing:
-      1px; } /* Multi Bars (4 bars - slide 6) */ .multi-bars { display: flex;
-      align-items: flex-end; justify-content: center; gap: 30px; height: 240px;
-      flex: 1; padding-top: 50px; } .multi-bar-group { display: flex;
-      flex-direction: column; align-items: center; } .multi-bar { width: 80px;
-      background: linear-gradient(180deg, #C8102E 0%, #8B0A1F 100%);
-      border-radius: 12px 12px 0 0; position: relative; box-shadow: 0 -8px 25px
-      rgba(200, 16, 46, 0.4); min-height: 5px; } .multi-bar-label { position:
-      absolute; top: -40px; left: 50%; transform: translateX(-50%); font-family:
-      'Bebas Neue', Arial, sans-serif; font-size: 28px; font-weight: 400; color:
-      #fff; white-space: nowrap; } .multi-bar-category { font-size: 13px; color:
-      #999; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
-      /* Activity Bars (6 bars - slide 7) */ .activity-bars { display: flex;
-      align-items: flex-end; justify-content: center; gap: 20px; height: 240px;
-      flex: 1; padding-top: 50px; } .activity-bar { width: 65px; background:
-      linear-gradient(180deg, #C8102E 0%, #8B0A1F 100%); border-radius: 10px
-      10px 0 0; position: relative; box-shadow: 0 -8px 25px rgba(200, 16, 46,
-      0.4); min-height: 5px; } .activity-bar-label { position: absolute; top:
-      -38px; left: 50%; transform: translateX(-50%); font-family: 'Bebas Neue',
-      Arial, sans-serif; font-size: 24px; font-weight: 400; color: #fff;
-      white-space: nowrap; } .activity-bar-category { font-size: 11px; color:
-      #999; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
-      /* Testimonials */ .testimonials-heading-slide { padding: 60px 80px;
-      display: flex; flex-direction: column; justify-content: center;
-      align-items: center; } .testimonials-title { font-family: 'Bebas Neue',
-      Arial, sans-serif; font-size: 120px; font-weight: 400; color: #C8102E;
-      text-align: center; text-transform: uppercase; letter-spacing: 3px;
-      z-index: 10; position: relative; } .testimonials-slide { padding: 60px
-      80px; } .testimonials-container { z-index: 10; position: relative; }
-      .testimonial-card { background: rgba(26, 26, 26, 0.95); border: 2px solid
-      #333; border-radius: 20px; padding: 30px 40px; margin-bottom: 25px; }
-      .testimonial-card:last-child { margin-bottom: 0; } .testimonial-text {
-      font-size: 16px; color: #ccc; line-height: 1.8; font-weight: 400;
-      font-style: italic; } .testimonial-empty { color: #666; text-align:
-      center; padding: 20px; } /* NPS and Activities Lists */ .nps-list {
-      margin-top: 20px; } .nps-list-item { font-size: 14px; color: #ccc;
-      margin-bottom: 15px; line-height: 1.6; } .nps-label { font-weight: 700;
-      color: #C8102E; margin-right: 5px; } .activity-list { margin-top: 20px; }
-      .activity-list-item { font-size: 13px; color: #ccc; margin-bottom: 12px;
-      line-height: 1.6; } .activity-label { font-weight: 700; color: #C8102E;
-      margin-right: 5px; } @media print { .slide { page-break-after: always; }
-      @page { size: landscape; margin: 0; } }
+      @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", Arial, sans-serif;
+        color: #fff;
+        background: #000;
+      }
+      .slide {
+        width: 297mm;
+        height: 210mm;
+        padding: 0;
+        margin: 0;
+        page-break-after: always;
+        position: relative;
+        overflow: hidden;
+        background: #000;
+      }
+      .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: #c8102e;
+        opacity: 0.9;
+      }
+      .circle-top-left {
+        width: 280px;
+        height: 280px;
+        top: -140px;
+        left: -140px;
+      }
+      .circle-top-right {
+        width: 120px;
+        height: 120px;
+        top: 60px;
+        right: 50px;
+      }
+      .circle-middle-left {
+        width: 60px;
+        height: 60px;
+        top: 55%;
+        left: 30px;
+      }
+      .circle-bottom-right {
+        width: 350px;
+        height: 350px;
+        bottom: -175px;
+        right: -100px;
+      }
+      .circle-middle-right {
+        width: 180px;
+        height: 180px;
+        top: 40%;
+        right: -50px;
+      }
+      .circle-small {
+        width: 90px;
+        height: 90px;
+        top: 80px;
+        left: 180px;
+      }
+      .circle-bottom-left {
+        width: 200px;
+        height: 200px;
+        bottom: -100px;
+        left: -50px;
+      }
+      .cover-slide {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 80px 100px;
+      }
+      .logo-container {
+        position: absolute;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+      }
+      .logo {
+        width: 280px;
+        height: auto;
+        display: block;
+      }
+      .badge {
+        background: #c8102e;
+        color: #fff;
+        padding: 12px 45px;
+        border-radius: 50px;
+        font-size: 20px;
+        font-weight: 700;
+        display: inline-block;
+        margin-bottom: 50px;
+        margin-top: 200px;
+        z-index: 10;
+        position: relative;
+      }
+      .title {
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 90px;
+        font-weight: 400;
+        color: #c8102e;
+        line-height: 1.1;
+        margin-bottom: 60px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        z-index: 10;
+        position: relative;
+      }
+      .subtitle {
+        font-size: 36px;
+        font-weight: 400;
+        margin-bottom: 15px;
+        color: #fff;
+        z-index: 10;
+        position: relative;
+      }
+      .instructor {
+        font-size: 32px;
+        font-weight: 400;
+        color: #ccc;
+        z-index: 10;
+        position: relative;
+      }
+      .participation-slide {
+        padding: 60px 80px;
+      }
+      .slide-header {
+        margin-bottom: 40px;
+        z-index: 10;
+        position: relative;
+      }
+      .slide-title {
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 64px;
+        font-weight: 400;
+        color: #c8102e;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+      }
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        align-items: stretch;
+        z-index: 10;
+        position: relative;
+      }
+      .dual-bar-chart-with-axis {
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 20px;
+        padding: 40px;
+        border: 2px solid #333;
+        display: flex;
+        gap: 20px;
+      }
+      .y-axis {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-right: 15px;
+        border-right: 2px solid #444;
+        height: 300px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        visibility: hidden;
+        width: 0;
+        padding: 0;
+        border: none;
+      }
+      .y-axis span {
+        font-size: 16px;
+        color: #999;
+        font-weight: 600;
+      }
+      .chart-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .dual-bar-wrapper {
+        position: relative;
+        height: 300px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        margin-bottom: 15px;
+        padding: 0 20px;
+      }
+      .bar {
+        width: 140px;
+        background: linear-gradient(
+          to bottom,
+          rgba(200, 16, 46, 1) 0%,
+          rgba(200, 16, 46, 0.8) 100%
+        );
+        border-radius: 15px 15px 0 0;
+        position: relative;
+        box-shadow: 0 4px 20px rgba(200, 16, 46, 0.3);
+        transition: all 0.3s ease;
+      }
+      .bar-label {
+        position: absolute;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 56px;
+        font-weight: 400;
+        color: #c8102e;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+      .bar-base {
+        text-align: center;
+        font-size: 15px;
+        color: #999;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-top: 15px;
+        line-height: 1.3;
+      }
+      .chart-labels {
+        display: flex;
+        justify-content: space-around;
+        padding: 0 20px;
+      }
+      .stats-container {
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 20px;
+        padding: 50px;
+        border: 2px solid #333;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .stat-card {
+        margin-bottom: 40px;
+      }
+      .stat-card:last-child {
+        margin-bottom: 0;
+      }
+      .stat-label {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+      }
+      .stat-value {
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 72px;
+        font-weight: 400;
+        color: #c8102e;
+        margin-bottom: 12px;
+        line-height: 1;
+        letter-spacing: 1px;
+      }
+      .stat-description {
+        font-size: 16px;
+        color: #ccc;
+        line-height: 1.5;
+        font-weight: 400;
+      }
+      .divider {
+        height: 2px;
+        background: linear-gradient(90deg, #c8102e 0%, transparent 100%);
+        margin: 40px 0;
+      }
+      .growth-slide {
+        padding: 60px 80px;
+      }
+      .growth-content {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 35px;
+        z-index: 10;
+        position: relative;
+      }
+      .growth-description {
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 20px;
+        padding: 35px;
+        border: 2px solid #333;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .growth-text {
+        font-size: 14px;
+        color: #ccc;
+        line-height: 1.7;
+        margin-bottom: 20px;
+      }
+      .growth-scale {
+        margin-top: 20px;
+      }
+      .growth-scale-title {
+        font-size: 15px;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+      .growth-scale-item {
+        font-size: 13px;
+        color: #ccc;
+        margin-bottom: 7px;
+        padding-left: 15px;
+        position: relative;
+      }
+      .growth-scale-item:before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: #c8102e;
+        font-size: 18px;
+      }
+      .growth-charts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 12px;
+      }
+      .mini-chart {
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 15px;
+        padding: 18px;
+        border: 2px solid #333;
+        display: flex;
+        flex-direction: column;
+      }
+      .mini-chart-title {
+        font-size: 12px;
+        color: #fff;
+        font-weight: 600;
+        margin-bottom: 8px;
+        text-align: center;
+        line-height: 1.3;
+      }
+      .mini-bars-wrapper {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 10px;
+        height: 95px;
+        flex: 1;
+      }
+      .mini-bar-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        max-width: 50px;
+      }
+      .mini-bars {
+        display: flex;
+        gap: 3px;
+        align-items: flex-end;
+        height: 70px;
+      }
+      .mini-bar-expected {
+        width: 10px;
+        background: linear-gradient(180deg, #ffd700 0%, #ffa500 100%);
+        border-radius: 4px 4px 0 0;
+        position: relative;
+      }
+      .mini-bar-achieved {
+        width: 10px;
+        background: linear-gradient(180deg, #00ced1 0%, #008b8b 100%);
+        border-radius: 4px 4px 0 0;
+        position: relative;
+      }
+      .mini-bar-category {
+        font-size: 8px;
+        color: #999;
+        margin-top: 4px;
+        text-align: center;
+      }
+      .mini-chart-legend {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 6px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 9px;
+        color: #ccc;
+      }
+      .legend-color {
+        width: 10px;
+        height: 7px;
+        border-radius: 2px;
+      }
+      .legend-expected {
+        background: linear-gradient(180deg, #ffd700 0%, #ffa500 100%);
+      }
+      .legend-achieved {
+        background: linear-gradient(180deg, #00ced1 0%, #008b8b 100%);
+      }
+      .progress-slide {
+        padding: 50px 70px;
+      }
+      .progress-content {
+        display: grid;
+        grid-template-columns: 400px 1fr;
+        gap: 40px;
+        z-index: 10;
+        position: relative;
+      }
+      .progress-description {
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 20px;
+        padding: 35px;
+        border: 2px solid #333;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .progress-chart-container {
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 20px;
+        padding: 40px 30px;
+        border: 2px solid #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chart-with-axis {
+        display: flex;
+        gap: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Shared bar container styles */
+      .stacked-bars,
+      .multi-bars,
+      .activity-bars {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        height: 280px;
+        flex: 1;
+        padding: 60px 15px 0;
+      }
+
+      /* Shared bar group styles */
+      .stacked-bar-group,
+      .multi-bar-group,
+      .activity-bar-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+      }
+
+      /* Individual bar styles */
+      .stacked-bar {
+        width: 100%;
+        max-width: 100px;
+        background: linear-gradient(
+          to bottom,
+          rgba(200, 16, 46, 1) 0%,
+          rgba(200, 16, 46, 0.8) 100%
+        );
+        border-radius: 12px 12px 0 0;
+        position: relative;
+        box-shadow: 0 4px 20px rgba(200, 16, 46, 0.3);
+        min-height: 5px;
+      }
+
+      .multi-bar {
+        width: 100%;
+        max-width: 80px;
+        background: linear-gradient(
+          to bottom,
+          rgba(200, 16, 46, 1) 0%,
+          rgba(200, 16, 46, 0.8) 100%
+        );
+        border-radius: 12px 12px 0 0;
+        position: relative;
+        box-shadow: 0 4px 20px rgba(200, 16, 46, 0.3);
+        min-height: 5px;
+      }
+
+      .activity-bar {
+        width: 100%;
+        max-width: 65px;
+        background: linear-gradient(
+          to bottom,
+          rgba(200, 16, 46, 1) 0%,
+          rgba(200, 16, 46, 0.8) 100%
+        );
+        border-radius: 10px 10px 0 0;
+        position: relative;
+        box-shadow: 0 4px 20px rgba(200, 16, 46, 0.3);
+        min-height: 5px;
+      }
+
+      /* Bar label styles */
+      .stacked-bar-label {
+        position: absolute;
+        top: -45px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 38px;
+        font-weight: 400;
+        color: #c8102e;
+        white-space: nowrap;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .multi-bar-label {
+        position: absolute;
+        top: -45px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 34px;
+        font-weight: 400;
+        color: #c8102e;
+        white-space: nowrap;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .activity-bar-label {
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 28px;
+        font-weight: 400;
+        color: #c8102e;
+        white-space: nowrap;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Category label styles */
+      .stacked-bar-category,
+      .multi-bar-category,
+      .activity-bar-category {
+        font-size: 11px;
+        color: #999;
+        margin-top: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.2;
+        width: 100%;
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+
+      .multi-bar-category {
+        font-size: 10px;
+      }
+
+      .activity-bar-category {
+        font-size: 9px;
+        margin-top: 8px;
+      }
+
+      .testimonials-heading-slide {
+        padding: 60px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .testimonials-title {
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 120px;
+        font-weight: 400;
+        color: #c8102e;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        z-index: 10;
+        position: relative;
+      }
+      .testimonials-slide {
+        padding: 60px 80px;
+      }
+      .testimonials-container {
+        z-index: 10;
+        position: relative;
+      }
+      .testimonial-card {
+        background: rgba(26, 26, 26, 0.95);
+        border: 2px solid #333;
+        border-radius: 20px;
+        padding: 30px 40px;
+        margin-bottom: 25px;
+      }
+      .testimonial-card:last-child {
+        margin-bottom: 0;
+      }
+      .testimonial-text {
+        font-size: 16px;
+        color: #ccc;
+        line-height: 1.8;
+        font-weight: 400;
+        font-style: italic;
+      }
+      .testimonial-empty {
+        color: #666;
+        text-align: center;
+        padding: 20px;
+      }
+      .nps-list {
+        margin-top: 20px;
+      }
+      .nps-list-item {
+        font-size: 13px;
+        color: #ccc;
+        margin-bottom: 12px;
+        line-height: 1.6;
+      }
+      .nps-label {
+        font-weight: 700;
+        color: #c8102e;
+        margin-right: 5px;
+      }
+      .activity-list {
+        margin-top: 20px;
+      }
+      .activity-list-item {
+        font-size: 12px;
+        color: #ccc;
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+      .activity-label {
+        font-weight: 700;
+        color: #c8102e;
+        margin-right: 5px;
+      }
+      @media print {
+        .slide {
+          page-break-after: always;
+        }
+        @page {
+          size: landscape;
+          margin: 0;
+        }
+      }
     </style>
   </head>
   <body>
@@ -199,10 +699,8 @@
       </div>
 
       <div class="content-grid">
-        <!-- Dual Bar Chart with Y-axis -->
         <div class="chart-container">
           <div class="dual-bar-chart-with-axis">
-            <!-- Y-axis -->
             <div class="y-axis">
               <span>100%</span>
               <span>75%</span>
@@ -211,16 +709,21 @@
               <span>0%</span>
             </div>
 
-            <!-- Chart area -->
             <div class="chart-area">
               <div class="dual-bar-wrapper">
                 <div>
-                  <div class="bar" style="height: {{goalSettingPercentage}}%;">
+                  <div
+                    class="bar"
+                    style="height: {{multiply goalSettingPercentage 3}}px;"
+                  >
                     <div class="bar-label">{{goalSettingPercentage}}%</div>
                   </div>
                 </div>
                 <div>
-                  <div class="bar" style="height: {{exitFormPercentage}}%;">
+                  <div
+                    class="bar"
+                    style="height: {{multiply exitFormPercentage 3}}px;"
+                  >
                     <div class="bar-label">{{exitFormPercentage}}%</div>
                   </div>
                 </div>
@@ -233,7 +736,6 @@
           </div>
         </div>
 
-        <!-- Statistics -->
         <div class="stats-container">
           <div class="stat-card">
             <div class="stat-label">Goal-Setting Form</div>
@@ -269,7 +771,6 @@
       </div>
 
       <div class="growth-content">
-        <!-- Description -->
         <div class="growth-description">
           <p class="growth-text">Students were presented with six different
             factors on the goal-setting form where they indicated how much
@@ -288,9 +789,7 @@
           </div>
         </div>
 
-        <!-- Charts Grid -->
         <div class="growth-charts">
-          <!-- Teamwork Chart -->
           <div class="mini-chart">
             <div class="mini-chart-title">Growth in teamwork</div>
             <div class="mini-bars-wrapper">
@@ -322,7 +821,6 @@
             </div>
           </div>
 
-          <!-- Professional Responsibility Chart -->
           <div class="mini-chart">
             <div class="mini-chart-title">Growth in professional responsibility</div>
             <div class="mini-bars-wrapper">
@@ -354,7 +852,6 @@
             </div>
           </div>
 
-          <!-- Effective Communication Chart -->
           <div class="mini-chart">
             <div class="mini-chart-title">Growth in effective communication</div>
             <div class="mini-bars-wrapper">
@@ -386,7 +883,6 @@
             </div>
           </div>
 
-          <!-- Problem Solving Chart -->
           <div class="mini-chart">
             <div class="mini-chart-title">Growth in problem solving</div>
             <div class="mini-bars-wrapper">
@@ -418,7 +914,6 @@
             </div>
           </div>
 
-          <!-- Cultural Humility Chart -->
           <div class="mini-chart">
             <div class="mini-chart-title">Growth in cultural humility</div>
             <div class="mini-bars-wrapper">
@@ -450,7 +945,6 @@
             </div>
           </div>
 
-          <!-- Ethical Decision Making Chart -->
           <div class="mini-chart">
             <div class="mini-chart-title">Growth in ethical decision making</div>
             <div class="mini-bars-wrapper">
@@ -496,7 +990,6 @@
       </div>
 
       <div class="progress-content">
-        <!-- Description -->
         <div class="progress-description">
           <p class="growth-text">Students were asked to assess how much progress
             they made in regard to achieving their goals set at the beginning of
@@ -521,26 +1014,15 @@
           </div>
         </div>
 
-        <!-- Chart with Y-axis -->
         <div class="progress-chart-container">
           <div class="chart-with-axis">
-            <!-- Y-axis -->
-            <div class="y-axis">
-              <span>100%</span>
-              <span>75%</span>
-              <span>50%</span>
-              <span>25%</span>
-              <span>0%</span>
-            </div>
-
-            <!-- Bars -->
             <div class="stacked-bars">
               {{#each progressTowardsGoals}}
                 <div class="stacked-bar-group">
                   {{#if (gt this.percentage 0)}}
                     <div
                       class="stacked-bar"
-                      style="height: calc(({{this.percentage}} / 100) * 240px);"
+                      style="height: {{multiply this.percentage 2.8}}px;"
                     >
                       <div class="stacked-bar-label">{{this.percentage}}%</div>
                     </div>
@@ -572,7 +1054,6 @@
       </div>
 
       <div class="progress-content">
-        <!-- Description -->
         <div class="progress-description">
           <p class="growth-text">Students were asked to individually assess each
             goal they set at the beginning of the school year, and quantify as
@@ -594,26 +1075,15 @@
           </div>
         </div>
 
-        <!-- Chart with Y-axis -->
         <div class="progress-chart-container">
           <div class="chart-with-axis">
-            <!-- Y-axis -->
-            <div class="y-axis">
-              <span>100%</span>
-              <span>75%</span>
-              <span>50%</span>
-              <span>25%</span>
-              <span>0%</span>
-            </div>
-
-            <!-- Bars -->
             <div class="stacked-bars">
               {{#each experienceConnection}}
                 <div class="stacked-bar-group">
                   {{#if (gt this.percentage 0)}}
                     <div
                       class="stacked-bar"
-                      style="height: calc(({{this.percentage}} / 100) * 240px);"
+                      style="height: {{multiply this.percentage 2.8}}px;"
                     >
                       <div class="stacked-bar-label">{{this.percentage}}%</div>
                     </div>
@@ -645,7 +1115,6 @@
       </div>
 
       <div class="progress-content">
-        <!-- Description -->
         <div class="progress-description">
           <p class="growth-text">After taking this class:</p>
 
@@ -658,26 +1127,15 @@
           </div>
         </div>
 
-        <!-- Chart with Y-axis -->
         <div class="progress-chart-container">
           <div class="chart-with-axis">
-            <!-- Y-axis -->
-            <div class="y-axis">
-              <span>100%</span>
-              <span>75%</span>
-              <span>50%</span>
-              <span>25%</span>
-              <span>0%</span>
-            </div>
-
-            <!-- Bars -->
             <div class="multi-bars">
               {{#each netPromoterScores}}
                 <div class="multi-bar-group">
                   {{#if (gt this.percentage 0)}}
                     <div
                       class="multi-bar"
-                      style="height: calc(({{this.percentage}} / 100) * 240px);"
+                      style="height: {{multiply this.percentage 2.8}}px;"
                     >
                       <div class="multi-bar-label">{{this.percentage}}%</div>
                     </div>
@@ -709,7 +1167,6 @@
       </div>
 
       <div class="progress-content">
-        <!-- Description -->
         <div class="progress-description">
           <p class="growth-text">Students were presented with a list of
             activities to choose which from
@@ -728,26 +1185,15 @@
           </div>
         </div>
 
-        <!-- Chart with Y-axis -->
         <div class="progress-chart-container">
           <div class="chart-with-axis">
-            <!-- Y-axis -->
-            <div class="y-axis">
-              <span>100%</span>
-              <span>75%</span>
-              <span>50%</span>
-              <span>25%</span>
-              <span>0%</span>
-            </div>
-
-            <!-- Bars -->
             <div class="activity-bars">
               {{#each activitiesScores}}
-                <div class="multi-bar-group">
+                <div class="activity-bar-group">
                   {{#if (gt this.percentage 0)}}
                     <div
                       class="activity-bar"
-                      style="height: calc(({{this.percentage}} / 100) * 240px);"
+                      style="height: {{multiply this.percentage 2.8}}px;"
                     >
                       <div class="activity-bar-label">{{this.percentage}}%</div>
                     </div>
