@@ -4,69 +4,855 @@
   <head>
     <meta charset="UTF-8" />
     <style>
-      body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
-      .header { text-align: center; border-bottom: 3px solid #667eea;
-      padding-bottom: 20px; margin-bottom: 30px; } h1 { color: #667eea;
-      margin-bottom: 5px; } .meta-info { color: #666; font-size: 14px; }
-      .section { margin-bottom: 30px; page-break-inside: avoid; } .section h2 {
-      color: #764ba2; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;
-      margin-bottom: 15px; } .growth-card { background: #f8f9fa; padding: 15px;
-      margin-bottom: 15px; border-radius: 5px; border-left: 4px solid #667eea; }
-      .growth-card h3 { color: #333; margin-bottom: 10px; } .comparison {
-      display: flex; justify-content: space-between; margin-top: 10px; }
-      .comparison div { flex: 1; padding: 10px; } .before { background: #fff3cd;
-      margin-right: 10px; border-radius: 3px; } .after { background: #d4edda;
-      border-radius: 3px; } table { width: 100%; border-collapse: collapse;
-      margin-top: 15px; } th, td { padding: 12px; text-align: left;
-      border-bottom: 1px solid #e0e0e0; } th { background-color: #f5f5f5;
-      font-weight: 600; }
+      @import
+      url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap');
+      * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family:
+      'Inter', Arial, sans-serif; color: #fff; background: #000; } .slide {
+      width: 297mm; height: 210mm; padding: 0; margin: 0; page-break-after:
+      always; position: relative; overflow: hidden; background: #000; } /*
+      Decorative circles */ .circle { position: absolute; border-radius: 50%;
+      background: #C8102E; opacity: 0.9; } .circle-top-left { width: 280px;
+      height: 280px; top: -140px; left: -140px; } .circle-top-right { width:
+      120px; height: 120px; top: 60px; right: 50px; } .circle-middle-left {
+      width: 60px; height: 60px; top: 55%; left: 30px; } .circle-bottom-right {
+      width: 350px; height: 350px; bottom: -175px; right: -100px; }
+      .circle-middle-right { width: 180px; height: 180px; top: 40%; right:
+      -50px; } .circle-small { width: 90px; height: 90px; top: 80px; left:
+      180px; } .circle-bottom-left { width: 200px; height: 200px; bottom:
+      -100px; left: -50px; } /* Cover Slide */ .cover-slide { display: flex;
+      flex-direction: column; justify-content: center; align-items: flex-start;
+      padding: 80px 100px; } .logo-container { position: absolute; top: 60px;
+      left: 50%; transform: translateX(-50%); z-index: 10; } .logo { width:
+      280px; height: auto; display: block; } .badge { background: #C8102E;
+      color: #fff; padding: 12px 45px; border-radius: 50px; font-size: 20px;
+      font-weight: 700; display: inline-block; margin-bottom: 50px; margin-top:
+      200px; z-index: 10; position: relative; } .title { font-family: 'Bebas
+      Neue', Arial, sans-serif; font-size: 90px; font-weight: 400; color:
+      #C8102E; line-height: 1.1; margin-bottom: 60px; text-transform: uppercase;
+      letter-spacing: 2px; z-index: 10; position: relative; } .subtitle {
+      font-size: 36px; font-weight: 400; margin-bottom: 15px; color: #fff;
+      z-index: 10; position: relative; } .instructor { font-size: 32px;
+      font-weight: 400; color: #ccc; z-index: 10; position: relative; } /*
+      Participation Slide */ .participation-slide { padding: 60px 80px; }
+      .slide-header { margin-bottom: 40px; z-index: 10; position: relative; }
+      .slide-title { font-family: 'Bebas Neue', Arial, sans-serif; font-size:
+      64px; font-weight: 400; color: #C8102E; margin-bottom: 10px;
+      letter-spacing: 1px; } .content-grid { display: grid;
+      grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch; z-index:
+      10; position: relative; } /* Dual Bar Chart with Y-axis */
+      .dual-bar-chart-with-axis { background: rgba(26, 26, 26, 0.95);
+      border-radius: 20px; padding: 40px; border: 2px solid #333; display: flex;
+      gap: 20px; } .y-axis { display: flex; flex-direction: column;
+      justify-content: space-between; padding-right: 15px; border-right: 2px
+      solid #444; height: 240px; padding-top: 5px; padding-bottom: 25px; }
+      .y-axis span { font-size: 14px; color: #999; font-weight: 600; }
+      .chart-area { flex: 1; display: flex; flex-direction: column; }
+      .dual-bar-wrapper { position: relative; height: 280px; display: flex;
+      align-items: flex-end; justify-content: center; gap: 60px; margin-bottom:
+      10px; } .bar { width: 120px; background: linear-gradient(180deg, #C8102E
+      0%, #8B0A1F 100%); border-radius: 12px 12px 0 0; position: relative;
+      box-shadow: 0 -8px 25px rgba(200, 16, 46, 0.4); } .bar-label { position:
+      absolute; top: -45px; width: 100%; text-align: center; font-family: 'Bebas
+      Neue', Arial, sans-serif; font-size: 48px; font-weight: 400; color: #fff;
+      letter-spacing: 1px; } .bar-base { text-align: center; font-size: 14px;
+      color: #999; font-weight: 400; text-transform: uppercase; letter-spacing:
+      1px; margin-top: 10px; } .chart-labels { display: flex; justify-content:
+      center; gap: 60px; } /* Stats Container */ .stats-container { background:
+      rgba(26, 26, 26, 0.95); border-radius: 20px; padding: 50px; border: 2px
+      solid #333; display: flex; flex-direction: column; justify-content:
+      center; } .stat-card { margin-bottom: 40px; } .stat-card:last-child {
+      margin-bottom: 0; } .stat-label { font-size: 14px; color: #999;
+      margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px;
+      font-weight: 400; } .stat-value { font-family: 'Bebas Neue', Arial,
+      sans-serif; font-size: 72px; font-weight: 400; color: #C8102E;
+      margin-bottom: 12px; line-height: 1; letter-spacing: 1px; }
+      .stat-description { font-size: 16px; color: #ccc; line-height: 1.5;
+      font-weight: 400; } .divider { height: 2px; background:
+      linear-gradient(90deg, #C8102E 0%, transparent 100%); margin: 40px 0; } /*
+      Student Growth Slide */ .growth-slide { padding: 60px 80px; }
+      .growth-content { display: grid; grid-template-columns: 380px 1fr; gap:
+      35px; z-index: 10; position: relative; } .growth-description { background:
+      rgba(26, 26, 26, 0.95); border-radius: 20px; padding: 35px; border: 2px
+      solid #333; display: flex; flex-direction: column; justify-content:
+      center; } .growth-text { font-size: 14px; color: #ccc; line-height: 1.7;
+      margin-bottom: 20px; } .growth-scale { margin-top: 20px; }
+      .growth-scale-title { font-size: 15px; color: #fff; font-weight: 600;
+      margin-bottom: 12px; } .growth-scale-item { font-size: 13px; color: #ccc;
+      margin-bottom: 7px; padding-left: 15px; position: relative; }
+      .growth-scale-item:before { content: '•'; position: absolute; left: 0;
+      color: #C8102E; font-size: 18px; } .growth-charts { display: grid;
+      grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap:
+      12px; } .mini-chart { background: rgba(26, 26, 26, 0.95); border-radius:
+      15px; padding: 18px; border: 2px solid #333; display: flex;
+      flex-direction: column; } .mini-chart-title { font-size: 12px; color:
+      #fff; font-weight: 600; margin-bottom: 8px; text-align: center;
+      line-height: 1.3; } .mini-bars-wrapper { display: flex; align-items:
+      flex-end; justify-content: center; gap: 10px; height: 95px; flex: 1; }
+      .mini-bar-group { display: flex; flex-direction: column; align-items:
+      center; flex: 1; max-width: 50px; } .mini-bars { display: flex; gap: 3px;
+      align-items: flex-end; height: 70px; } .mini-bar-expected { width: 10px;
+      background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+      border-radius: 4px 4px 0 0; position: relative; } .mini-bar-achieved {
+      width: 10px; background: linear-gradient(180deg, #00CED1 0%, #008B8B
+      100%); border-radius: 4px 4px 0 0; position: relative; }
+      .mini-bar-category { font-size: 8px; color: #999; margin-top: 4px;
+      text-align: center; } .mini-chart-legend { display: flex; justify-content:
+      center; gap: 12px; margin-top: 6px; } .legend-item { display: flex;
+      align-items: center; gap: 4px; font-size: 9px; color: #ccc; }
+      .legend-color { width: 10px; height: 7px; border-radius: 2px; }
+      .legend-expected { background: linear-gradient(180deg, #FFD700 0%, #FFA500
+      100%); } .legend-achieved { background: linear-gradient(180deg, #00CED1
+      0%, #008B8B 100%); } /* Progress/Connection Slide */ .progress-slide {
+      padding: 60px 80px; } .progress-content { display: grid;
+      grid-template-columns: 450px 1fr; gap: 50px; z-index: 10; position:
+      relative; } .progress-description { background: rgba(26, 26, 26, 0.95);
+      border-radius: 20px; padding: 40px; border: 2px solid #333; display: flex;
+      flex-direction: column; justify-content: center; }
+      .progress-chart-container { background: rgba(26, 26, 26, 0.95);
+      border-radius: 20px; padding: 40px; border: 2px solid #333; display: flex;
+      align-items: center; justify-content: center; } /* Chart with Y-axis for
+      slides 4-7 */ .chart-with-axis { display: flex; gap: 20px; width: 100%;
+      height: 100%; } /* Stacked Bars (3 bars - slides 4, 5) */ .stacked-bars {
+      display: flex; align-items: flex-end; justify-content: center; gap: 40px;
+      height: 240px; flex: 1; padding-top: 50px; } .stacked-bar-group { display:
+      flex; flex-direction: column; align-items: center; } .stacked-bar { width:
+      100px; background: linear-gradient(180deg, #C8102E 0%, #8B0A1F 100%);
+      border-radius: 12px 12px 0 0; position: relative; box-shadow: 0 -8px 25px
+      rgba(200, 16, 46, 0.4); min-height: 5px; } .stacked-bar-label { position:
+      absolute; top: -45px; left: 50%; transform: translateX(-50%); font-family:
+      'Bebas Neue', Arial, sans-serif; font-size: 32px; font-weight: 400; color:
+      #fff; white-space: nowrap; } .stacked-bar-category { font-size: 14px;
+      color: #999; margin-top: 10px; text-transform: uppercase; letter-spacing:
+      1px; } /* Multi Bars (4 bars - slide 6) */ .multi-bars { display: flex;
+      align-items: flex-end; justify-content: center; gap: 30px; height: 240px;
+      flex: 1; padding-top: 50px; } .multi-bar-group { display: flex;
+      flex-direction: column; align-items: center; } .multi-bar { width: 80px;
+      background: linear-gradient(180deg, #C8102E 0%, #8B0A1F 100%);
+      border-radius: 12px 12px 0 0; position: relative; box-shadow: 0 -8px 25px
+      rgba(200, 16, 46, 0.4); min-height: 5px; } .multi-bar-label { position:
+      absolute; top: -40px; left: 50%; transform: translateX(-50%); font-family:
+      'Bebas Neue', Arial, sans-serif; font-size: 28px; font-weight: 400; color:
+      #fff; white-space: nowrap; } .multi-bar-category { font-size: 13px; color:
+      #999; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
+      /* Activity Bars (6 bars - slide 7) */ .activity-bars { display: flex;
+      align-items: flex-end; justify-content: center; gap: 20px; height: 240px;
+      flex: 1; padding-top: 50px; } .activity-bar { width: 65px; background:
+      linear-gradient(180deg, #C8102E 0%, #8B0A1F 100%); border-radius: 10px
+      10px 0 0; position: relative; box-shadow: 0 -8px 25px rgba(200, 16, 46,
+      0.4); min-height: 5px; } .activity-bar-label { position: absolute; top:
+      -38px; left: 50%; transform: translateX(-50%); font-family: 'Bebas Neue',
+      Arial, sans-serif; font-size: 24px; font-weight: 400; color: #fff;
+      white-space: nowrap; } .activity-bar-category { font-size: 11px; color:
+      #999; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
+      /* Testimonials */ .testimonials-heading-slide { padding: 60px 80px;
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; } .testimonials-title { font-family: 'Bebas Neue',
+      Arial, sans-serif; font-size: 120px; font-weight: 400; color: #C8102E;
+      text-align: center; text-transform: uppercase; letter-spacing: 3px;
+      z-index: 10; position: relative; } .testimonials-slide { padding: 60px
+      80px; } .testimonials-container { z-index: 10; position: relative; }
+      .testimonial-card { background: rgba(26, 26, 26, 0.95); border: 2px solid
+      #333; border-radius: 20px; padding: 30px 40px; margin-bottom: 25px; }
+      .testimonial-card:last-child { margin-bottom: 0; } .testimonial-text {
+      font-size: 16px; color: #ccc; line-height: 1.8; font-weight: 400;
+      font-style: italic; } .testimonial-empty { color: #666; text-align:
+      center; padding: 20px; } /* NPS and Activities Lists */ .nps-list {
+      margin-top: 20px; } .nps-list-item { font-size: 14px; color: #ccc;
+      margin-bottom: 15px; line-height: 1.6; } .nps-label { font-weight: 700;
+      color: #C8102E; margin-right: 5px; } .activity-list { margin-top: 20px; }
+      .activity-list-item { font-size: 13px; color: #ccc; margin-bottom: 12px;
+      line-height: 1.6; } .activity-label { font-weight: 700; color: #C8102E;
+      margin-right: 5px; } @media print { .slide { page-break-after: always; }
+      @page { size: landscape; margin: 0; } }
     </style>
   </head>
   <body>
-    <div class="header">
-      <h1>Growth Report</h1>
-      <div class="meta-info">
-        <p><strong>Experience:</strong> {{experience}}</p>
-        <p><strong>Generated:</strong> {{generatedDate}}</p>
-        <p><strong>Total Participants:</strong> {{totalParticipants}}</p>
+    <!-- SLIDE 1: COVER -->
+    <div class="slide cover-slide">
+      <div class="circle circle-top-left"></div>
+      <div class="circle circle-top-right"></div>
+      <div class="circle circle-small"></div>
+      <div class="circle circle-middle-right"></div>
+      <div class="circle circle-bottom-right"></div>
+      <div class="circle circle-middle-left"></div>
+
+      <div class="logo-container">
+        <img src="{{{logoBase64}}}" alt="HPE DSI Logo" class="logo" />
+      </div>
+
+      <div class="badge">Growth Report</div>
+
+      <h1 class="title">{{experience}}</h1>
+
+      <p class="subtitle">Fall 2024</p>
+      <p class="instructor">Instructor: Dr. Ioannis Konstantinidis</p>
+    </div>
+
+    <!-- SLIDE 2: STUDENT PARTICIPATION -->
+    <div class="slide participation-slide">
+      <div class="circle circle-top-left"></div>
+      <div class="circle circle-middle-left"></div>
+      <div class="circle circle-bottom-right"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Student Participation</h2>
+      </div>
+
+      <div class="content-grid">
+        <!-- Dual Bar Chart with Y-axis -->
+        <div class="chart-container">
+          <div class="dual-bar-chart-with-axis">
+            <!-- Y-axis -->
+            <div class="y-axis">
+              <span>100%</span>
+              <span>75%</span>
+              <span>50%</span>
+              <span>25%</span>
+              <span>0%</span>
+            </div>
+
+            <!-- Chart area -->
+            <div class="chart-area">
+              <div class="dual-bar-wrapper">
+                <div>
+                  <div class="bar" style="height: {{goalSettingPercentage}}%;">
+                    <div class="bar-label">{{goalSettingPercentage}}%</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="bar" style="height: {{exitFormPercentage}}%;">
+                    <div class="bar-label">{{exitFormPercentage}}%</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-labels">
+                <div class="bar-base">Goal-Setting<br />Form</div>
+                <div class="bar-base">Exit<br />Form</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-label">Goal-Setting Form</div>
+            <div class="stat-value">{{goalSettingPercentage}}%</div>
+            <div
+              class="stat-description"
+            >{{goalSettingCompleted}}/{{totalRegistered}}
+              registered students completed the goal-setting form</div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="stat-card">
+            <div class="stat-label">Exit Form</div>
+            <div class="stat-value">{{exitFormPercentage}}%</div>
+            <div
+              class="stat-description"
+            >{{exitFormCompleted}}/{{totalRegistered}}
+              registered students completed the exit form</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="section">
-      <h2>Growth Analysis</h2>
-      {{#each exitForms}}
-        <div class="growth-card">
-          <h3>{{this.name}}</h3>
-          <p><strong>Skills Gained:</strong> {{this.skillsGained}}</p>
-          <p><strong>Achievements:</strong> {{this.achievements}}</p>
-          <p><strong>Satisfaction Rating:</strong> {{this.satisfaction}}/10</p>
-          {{#if this.feedback}}
-            <p><strong>Feedback:</strong> {{this.feedback}}</p>
-          {{/if}}
+    <!-- SLIDE 3: STUDENT GROWTH -->
+    <div class="slide growth-slide">
+      <div class="circle circle-top-right"></div>
+      <div class="circle circle-bottom-left"></div>
+      <div class="circle circle-middle-right"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Student Growth</h2>
+      </div>
+
+      <div class="growth-content">
+        <!-- Description -->
+        <div class="growth-description">
+          <p class="growth-text">Students were presented with six different
+            factors on the goal-setting form where they indicated how much
+            growth they expect in that factor from
+            {{experience}}. In the exit form at the end of the school year,
+            students then indicated how much growth they actually experienced in
+            each factor from
+            {{experience}}.</p>
+
+          <div class="growth-scale">
+            <div class="growth-scale-title">The range of growth options were:</div>
+            <div class="growth-scale-item">None</div>
+            <div class="growth-scale-item">Little</div>
+            <div class="growth-scale-item">Moderate</div>
+            <div class="growth-scale-item">A lot</div>
+          </div>
         </div>
-      {{/each}}
+
+        <!-- Charts Grid -->
+        <div class="growth-charts">
+          <!-- Teamwork Chart -->
+          <div class="mini-chart">
+            <div class="mini-chart-title">Growth in teamwork</div>
+            <div class="mini-bars-wrapper">
+              {{#each studentGrowth.teamwork}}
+                <div class="mini-bar-group">
+                  <div class="mini-bars">
+                    <div
+                      class="mini-bar-expected"
+                      style="height: calc({{this.expected}}% * 0.7);"
+                    ></div>
+                    <div
+                      class="mini-bar-achieved"
+                      style="height: calc({{this.achieved}}% * 0.7);"
+                    ></div>
+                  </div>
+                  <div class="mini-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+            <div class="mini-chart-legend">
+              <div class="legend-item"><div
+                  class="legend-color legend-expected"
+                ></div>
+                Expected</div>
+              <div class="legend-item"><div
+                  class="legend-color legend-achieved"
+                ></div>
+                Achieved</div>
+            </div>
+          </div>
+
+          <!-- Professional Responsibility Chart -->
+          <div class="mini-chart">
+            <div class="mini-chart-title">Growth in professional responsibility</div>
+            <div class="mini-bars-wrapper">
+              {{#each studentGrowth.professionalResponsibility}}
+                <div class="mini-bar-group">
+                  <div class="mini-bars">
+                    <div
+                      class="mini-bar-expected"
+                      style="height: calc({{this.expected}}% * 0.7);"
+                    ></div>
+                    <div
+                      class="mini-bar-achieved"
+                      style="height: calc({{this.achieved}}% * 0.7);"
+                    ></div>
+                  </div>
+                  <div class="mini-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+            <div class="mini-chart-legend">
+              <div class="legend-item"><div
+                  class="legend-color legend-expected"
+                ></div>
+                Expected</div>
+              <div class="legend-item"><div
+                  class="legend-color legend-achieved"
+                ></div>
+                Achieved</div>
+            </div>
+          </div>
+
+          <!-- Effective Communication Chart -->
+          <div class="mini-chart">
+            <div class="mini-chart-title">Growth in effective communication</div>
+            <div class="mini-bars-wrapper">
+              {{#each studentGrowth.effectiveCommunication}}
+                <div class="mini-bar-group">
+                  <div class="mini-bars">
+                    <div
+                      class="mini-bar-expected"
+                      style="height: calc({{this.expected}}% * 0.7);"
+                    ></div>
+                    <div
+                      class="mini-bar-achieved"
+                      style="height: calc({{this.achieved}}% * 0.7);"
+                    ></div>
+                  </div>
+                  <div class="mini-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+            <div class="mini-chart-legend">
+              <div class="legend-item"><div
+                  class="legend-color legend-expected"
+                ></div>
+                Expected</div>
+              <div class="legend-item"><div
+                  class="legend-color legend-achieved"
+                ></div>
+                Achieved</div>
+            </div>
+          </div>
+
+          <!-- Problem Solving Chart -->
+          <div class="mini-chart">
+            <div class="mini-chart-title">Growth in problem solving</div>
+            <div class="mini-bars-wrapper">
+              {{#each studentGrowth.problemSolving}}
+                <div class="mini-bar-group">
+                  <div class="mini-bars">
+                    <div
+                      class="mini-bar-expected"
+                      style="height: calc({{this.expected}}% * 0.7);"
+                    ></div>
+                    <div
+                      class="mini-bar-achieved"
+                      style="height: calc({{this.achieved}}% * 0.7);"
+                    ></div>
+                  </div>
+                  <div class="mini-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+            <div class="mini-chart-legend">
+              <div class="legend-item"><div
+                  class="legend-color legend-expected"
+                ></div>
+                Expected</div>
+              <div class="legend-item"><div
+                  class="legend-color legend-achieved"
+                ></div>
+                Achieved</div>
+            </div>
+          </div>
+
+          <!-- Cultural Humility Chart -->
+          <div class="mini-chart">
+            <div class="mini-chart-title">Growth in cultural humility</div>
+            <div class="mini-bars-wrapper">
+              {{#each studentGrowth.culturalHumility}}
+                <div class="mini-bar-group">
+                  <div class="mini-bars">
+                    <div
+                      class="mini-bar-expected"
+                      style="height: calc({{this.expected}}% * 0.7);"
+                    ></div>
+                    <div
+                      class="mini-bar-achieved"
+                      style="height: calc({{this.achieved}}% * 0.7);"
+                    ></div>
+                  </div>
+                  <div class="mini-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+            <div class="mini-chart-legend">
+              <div class="legend-item"><div
+                  class="legend-color legend-expected"
+                ></div>
+                Expected</div>
+              <div class="legend-item"><div
+                  class="legend-color legend-achieved"
+                ></div>
+                Achieved</div>
+            </div>
+          </div>
+
+          <!-- Ethical Decision Making Chart -->
+          <div class="mini-chart">
+            <div class="mini-chart-title">Growth in ethical decision making</div>
+            <div class="mini-bars-wrapper">
+              {{#each studentGrowth.ethicalDecisionMaking}}
+                <div class="mini-bar-group">
+                  <div class="mini-bars">
+                    <div
+                      class="mini-bar-expected"
+                      style="height: calc({{this.expected}}% * 0.7);"
+                    ></div>
+                    <div
+                      class="mini-bar-achieved"
+                      style="height: calc({{this.achieved}}% * 0.7);"
+                    ></div>
+                  </div>
+                  <div class="mini-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+            <div class="mini-chart-legend">
+              <div class="legend-item"><div
+                  class="legend-color legend-expected"
+                ></div>
+                Expected</div>
+              <div class="legend-item"><div
+                  class="legend-color legend-achieved"
+                ></div>
+                Achieved</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="section">
-      <h2>Goal Achievement Summary</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Participant</th>
-            <th>Goal</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each goals}}
-            <tr>
-              <td>{{this.name}}</td>
-              <td>{{this.goal}}</td>
-              <td>{{this.status}}</td>
-            </tr>
+    <!-- SLIDE 4: PROGRESS TOWARDS GOALS -->
+    <div class="slide progress-slide">
+      <div class="circle circle-top-left"></div>
+      <div class="circle circle-middle-right"></div>
+      <div class="circle circle-bottom-right"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Progress Towards Goals</h2>
+      </div>
+
+      <div class="progress-content">
+        <!-- Description -->
+        <div class="progress-description">
+          <p class="growth-text">Students were asked to assess how much progress
+            they made in regard to achieving their goals set at the beginning of
+            the school year.</p>
+
+          <p class="growth-text">On average, students felt they made some to
+            lots of progress towards their goals set in
+            {{experience}}.
+            {{totalGoals}}
+            goals were cumulatively set across all students.</p>
+
+          <div class="growth-scale">
+            <div class="growth-scale-title">The scale is as follows:</div>
+            <div class="growth-scale-item">I did not make progress towards this
+              goal</div>
+            <div class="growth-scale-item">I made little progress towards this
+              goal</div>
+            <div class="growth-scale-item">I made some progress towards this
+              goal</div>
+            <div class="growth-scale-item">I made lots of progress towards this
+              goal</div>
+          </div>
+        </div>
+
+        <!-- Chart with Y-axis -->
+        <div class="progress-chart-container">
+          <div class="chart-with-axis">
+            <!-- Y-axis -->
+            <div class="y-axis">
+              <span>100%</span>
+              <span>75%</span>
+              <span>50%</span>
+              <span>25%</span>
+              <span>0%</span>
+            </div>
+
+            <!-- Bars -->
+            <div class="stacked-bars">
+              {{#each progressTowardsGoals}}
+                <div class="stacked-bar-group">
+                  {{#if (gt this.percentage 0)}}
+                    <div
+                      class="stacked-bar"
+                      style="height: calc(({{this.percentage}} / 100) * 240px);"
+                    >
+                      <div class="stacked-bar-label">{{this.percentage}}%</div>
+                    </div>
+                  {{else}}
+                    <div class="stacked-bar" style="height: 5px; opacity: 0.3;">
+                      <div
+                        class="stacked-bar-label"
+                        style="display: none;"
+                      >{{this.percentage}}%</div>
+                    </div>
+                  {{/if}}
+                  <div class="stacked-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: EXPERIENCE CONNECTION -->
+    <div class="slide progress-slide">
+      <div class="circle circle-top-right"></div>
+      <div class="circle circle-bottom-left"></div>
+      <div class="circle circle-middle-left"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Experience Connection</h2>
+      </div>
+
+      <div class="progress-content">
+        <!-- Description -->
+        <div class="progress-description">
+          <p class="growth-text">Students were asked to individually assess each
+            goal they set at the beginning of the school year, and quantify as
+            to how useful their experience in
+            {{experience}}
+            was in conjunction with achieving that goal.</p>
+
+          <p class="growth-text">{{totalGoals}}
+            goals were cumulatively set across all students.</p>
+
+          <div class="growth-scale">
+            <div class="growth-scale-title">The scale is as follows:</div>
+            <div class="growth-scale-item">The progress I made towards this goal
+              was not due to this experience</div>
+            <div class="growth-scale-item">The progress I made towards this goal
+              was partly due to this experience</div>
+            <div class="growth-scale-item">The progress I made towards this goal
+              was largely due to this experience</div>
+          </div>
+        </div>
+
+        <!-- Chart with Y-axis -->
+        <div class="progress-chart-container">
+          <div class="chart-with-axis">
+            <!-- Y-axis -->
+            <div class="y-axis">
+              <span>100%</span>
+              <span>75%</span>
+              <span>50%</span>
+              <span>25%</span>
+              <span>0%</span>
+            </div>
+
+            <!-- Bars -->
+            <div class="stacked-bars">
+              {{#each experienceConnection}}
+                <div class="stacked-bar-group">
+                  {{#if (gt this.percentage 0)}}
+                    <div
+                      class="stacked-bar"
+                      style="height: calc(({{this.percentage}} / 100) * 240px);"
+                    >
+                      <div class="stacked-bar-label">{{this.percentage}}%</div>
+                    </div>
+                  {{else}}
+                    <div class="stacked-bar" style="height: 5px; opacity: 0.3;">
+                      <div
+                        class="stacked-bar-label"
+                        style="display: none;"
+                      >{{this.percentage}}%</div>
+                    </div>
+                  {{/if}}
+                  <div class="stacked-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: NET PROMOTER -->
+    <div class="slide progress-slide">
+      <div class="circle circle-top-left"></div>
+      <div class="circle circle-middle-right"></div>
+      <div class="circle circle-bottom-right"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Net Promoter</h2>
+      </div>
+
+      <div class="progress-content">
+        <!-- Description -->
+        <div class="progress-description">
+          <p class="growth-text">After taking this class:</p>
+
+          <div class="nps-list">
+            {{#each netPromoterDescriptions}}
+              <div class="nps-list-item">
+                <span class="nps-label">{{this.label}}:</span>{{this.text}}
+              </div>
+            {{/each}}
+          </div>
+        </div>
+
+        <!-- Chart with Y-axis -->
+        <div class="progress-chart-container">
+          <div class="chart-with-axis">
+            <!-- Y-axis -->
+            <div class="y-axis">
+              <span>100%</span>
+              <span>75%</span>
+              <span>50%</span>
+              <span>25%</span>
+              <span>0%</span>
+            </div>
+
+            <!-- Bars -->
+            <div class="multi-bars">
+              {{#each netPromoterScores}}
+                <div class="multi-bar-group">
+                  {{#if (gt this.percentage 0)}}
+                    <div
+                      class="multi-bar"
+                      style="height: calc(({{this.percentage}} / 100) * 240px);"
+                    >
+                      <div class="multi-bar-label">{{this.percentage}}%</div>
+                    </div>
+                  {{else}}
+                    <div class="multi-bar" style="height: 5px; opacity: 0.3;">
+                      <div
+                        class="multi-bar-label"
+                        style="display: none;"
+                      >{{this.percentage}}%</div>
+                    </div>
+                  {{/if}}
+                  <div class="multi-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: ACTIVITIES -->
+    <div class="slide progress-slide">
+      <div class="circle circle-top-right"></div>
+      <div class="circle circle-bottom-left"></div>
+      <div class="circle circle-middle-left"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Activities</h2>
+      </div>
+
+      <div class="progress-content">
+        <!-- Description -->
+        <div class="progress-description">
+          <p class="growth-text">Students were presented with a list of
+            activities to choose which from
+            {{experience}}
+            were most helpful in contributing to their achieved goals. Below are
+            the activities ranked by percentage of total goals set among
+            students ({{totalGoals}}) attributing each activity to helping
+            achieve each goal:</p>
+
+          <div class="activity-list">
+            {{#each activitiesDescriptions}}
+              <div class="activity-list-item">
+                <span class="activity-label">{{this.label}}:</span>{{this.text}}
+              </div>
+            {{/each}}
+          </div>
+        </div>
+
+        <!-- Chart with Y-axis -->
+        <div class="progress-chart-container">
+          <div class="chart-with-axis">
+            <!-- Y-axis -->
+            <div class="y-axis">
+              <span>100%</span>
+              <span>75%</span>
+              <span>50%</span>
+              <span>25%</span>
+              <span>0%</span>
+            </div>
+
+            <!-- Bars -->
+            <div class="activity-bars">
+              {{#each activitiesScores}}
+                <div class="multi-bar-group">
+                  {{#if (gt this.percentage 0)}}
+                    <div
+                      class="activity-bar"
+                      style="height: calc(({{this.percentage}} / 100) * 240px);"
+                    >
+                      <div class="activity-bar-label">{{this.percentage}}%</div>
+                    </div>
+                  {{else}}
+                    <div
+                      class="activity-bar"
+                      style="height: 5px; opacity: 0.3;"
+                    >
+                      <div
+                        class="activity-bar-label"
+                        style="display: none;"
+                      >{{this.percentage}}%</div>
+                    </div>
+                  {{/if}}
+                  <div class="activity-bar-category">{{this.category}}</div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: TESTIMONIALS HEADING -->
+    <div class="slide testimonials-heading-slide">
+      <div class="circle circle-top-left"></div>
+      <div class="circle circle-bottom-right"></div>
+      <div class="circle circle-middle-right"></div>
+
+      <h1 class="testimonials-title">Student<br />Testimonials</h1>
+    </div>
+
+    <!-- SLIDE 9: BIGGEST LESSONS LEARNED -->
+    <div class="slide testimonials-slide">
+      <div class="circle circle-top-right"></div>
+      <div class="circle circle-middle-left"></div>
+      <div class="circle circle-bottom-left"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Biggest Lessons Learned</h2>
+      </div>
+
+      <div class="testimonials-container">
+        {{#if biggestLessons}}
+          {{#each biggestLessons}}
+            <div class="testimonial-card">
+              <p class="testimonial-text">"{{this}}"</p>
+            </div>
           {{/each}}
-        </tbody>
-      </table>
+        {{else}}
+          <div class="testimonial-card">
+            <p class="testimonial-empty">No responses available</p>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
+    <!-- SLIDE 10: EXPERIENCE CONTRIBUTIONS -->
+    <div class="slide testimonials-slide">
+      <div class="circle circle-top-left"></div>
+      <div class="circle circle-middle-right"></div>
+      <div class="circle circle-bottom-right"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Experience Contributions</h2>
+      </div>
+
+      <div class="testimonials-container">
+        {{#if experienceContributions}}
+          {{#each experienceContributions}}
+            <div class="testimonial-card">
+              <p class="testimonial-text">"{{this}}"</p>
+            </div>
+          {{/each}}
+        {{else}}
+          <div class="testimonial-card">
+            <p class="testimonial-empty">No responses available</p>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
+    <!-- SLIDE 11: ADDITIONAL COMMENTS -->
+    <div class="slide testimonials-slide">
+      <div class="circle circle-top-right"></div>
+      <div class="circle circle-bottom-left"></div>
+      <div class="circle circle-middle-left"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Additional Comments</h2>
+      </div>
+
+      <div class="testimonials-container">
+        {{#if additionalComments}}
+          {{#each additionalComments}}
+            <div class="testimonial-card">
+              <p class="testimonial-text">"{{this}}"</p>
+            </div>
+          {{/each}}
+        {{else}}
+          <div class="testimonial-card">
+            <p class="testimonial-empty">No responses available</p>
+          </div>
+        {{/if}}
+      </div>
     </div>
   </body>
 </html>

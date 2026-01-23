@@ -1,70 +1,371 @@
-<!-- filepath: f:\Automatic report generation\templates\profile_report.hbs -->
+<!-- COMPLETE PROFILE REPORT TEMPLATE - REPLACE ENTIRE FILE -->
 
 <html>
   <head>
     <meta charset="UTF-8" />
     <style>
-      @import
-      url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap');
-      * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family:
-      'Inter', Arial, sans-serif; color: #fff; background: #000; } .slide {
-      width: 297mm; height: 210mm; padding: 0; margin: 0; page-break-after:
-      always; position: relative; overflow: hidden; background: #000; } /*
-      Decorative circles */ .circle { position: absolute; border-radius: 50%;
-      background: #C8102E; opacity: 0.9; } .circle-top-left { width: 280px;
-      height: 280px; top: -140px; left: -140px; } .circle-top-right { width:
-      120px; height: 120px; top: 60px; right: 50px; } .circle-middle-left {
-      width: 60px; height: 60px; top: 55%; left: 30px; } .circle-bottom-right {
-      width: 350px; height: 350px; bottom: -175px; right: -100px; }
-      .circle-middle-right { width: 180px; height: 180px; top: 40%; right:
-      -50px; } .circle-small { width: 90px; height: 90px; top: 80px; left:
-      180px; } /* Cover Slide */ .cover-slide { display: flex; flex-direction:
-      column; justify-content: center; align-items: flex-start; padding: 80px
-      100px; } .logo-container { position: absolute; top: 60px; left: 50%;
-      transform: translateX(-50%); z-index: 10; } .logo { width: 280px; height:
-      auto; display: block; } .badge { background: #C8102E; color: #fff;
-      padding: 12px 45px; border-radius: 50px; font-size: 20px; font-weight:
-      700; display: inline-block; margin-bottom: 50px; margin-top: 200px;
-      z-index: 10; position: relative; } .title { font-family: 'Bebas Neue',
-      Arial, sans-serif; font-size: 90px; font-weight: 400; color: #C8102E;
-      line-height: 1.1; margin-bottom: 60px; text-transform: uppercase;
-      letter-spacing: 2px; z-index: 10; position: relative; } .subtitle {
-      font-size: 36px; font-weight: 400; margin-bottom: 15px; color: #fff;
-      z-index: 10; position: relative; } .instructor { font-size: 32px;
-      font-weight: 400; color: #ccc; z-index: 10; position: relative; } /*
-      Participation Slide */ .participation-slide { padding: 60px 80px; }
-      .slide-header { margin-bottom: 50px; z-index: 10; position: relative; }
-      .slide-title { font-family: 'Bebas Neue', Arial, sans-serif; font-size:
-      64px; font-weight: 400; color: #C8102E; margin-bottom: 10px;
-      letter-spacing: 1px; } .slide-subtitle { font-size: 20px; color: #999;
-      font-weight: 400; } .content-grid { display: grid; grid-template-columns:
-      1fr 1fr; gap: 60px; align-items: center; z-index: 10; position: relative;
-      } .chart-container { position: relative; } .bar-chart { background:
-      rgba(26, 26, 26, 0.95); border-radius: 20px; padding: 40px; border: 2px
-      solid #333; height: 450px; display: flex; flex-direction: column;
-      justify-content: space-between; } .bar-wrapper { position: relative;
-      height: 300px; display: flex; align-items: flex-end; justify-content:
-      center; margin-bottom: 20px; } .bar { width: 180px; background:
-      linear-gradient(180deg, #C8102E 0%, #8B0A1F 100%); border-radius: 12px
-      12px 0 0; position: relative; box-shadow: 0 -8px 25px rgba(200, 16, 46,
-      0.4); } .bar-label { position: absolute; top: -45px; width: 100%;
-      text-align: center; font-family: 'Bebas Neue', Arial, sans-serif;
-      font-size: 48px; font-weight: 400; color: #C8102E; letter-spacing: 1px; }
-      .bar-base { text-align: center; font-size: 16px; color: #999; font-weight:
-      400; text-transform: uppercase; letter-spacing: 2px; } .stats-container {
-      background: rgba(26, 26, 26, 0.95); border-radius: 20px; padding: 50px;
-      border: 2px solid #333; height: 450px; display: flex; flex-direction:
-      column; justify-content: center; } .stat-card { margin-bottom: 40px; }
-      .stat-card:last-child { margin-bottom: 0; } .stat-label { font-size: 14px;
-      color: #999; margin-bottom: 12px; text-transform: uppercase;
-      letter-spacing: 2px; font-weight: 400; } .stat-value { font-family: 'Bebas
-      Neue', Arial, sans-serif; font-size: 72px; font-weight: 400; color:
-      #C8102E; margin-bottom: 12px; line-height: 1; letter-spacing: 1px; }
-      .stat-description { font-size: 16px; color: #ccc; line-height: 1.5;
-      font-weight: 400; } .divider { height: 2px; background:
-      linear-gradient(90deg, #C8102E 0%, transparent 100%); margin: 40px 0; }
-      @media print { .slide { page-break-after: always; } @page { size:
-      landscape; margin: 0; } }
+      @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", Arial, sans-serif;
+        color: #fff;
+        background: #000;
+      }
+      .slide {
+        width: 297mm;
+        height: 210mm;
+        padding: 0;
+        margin: 0;
+        page-break-after: always;
+        position: relative;
+        overflow: hidden;
+        background: #000;
+      } /*
+      Decorative circles */
+      .circle {
+        position: absolute;
+        border-radius: 50%;
+        background: #c8102e;
+        opacity: 0.9;
+      }
+      .circle-top-left {
+        width: 280px;
+        height: 280px;
+        top: -140px;
+        left: -140px;
+      }
+      .circle-top-right {
+        width: 120px;
+        height: 120px;
+        top: 60px;
+        right: 50px;
+      }
+      .circle-middle-left {
+        width: 60px;
+        height: 60px;
+        top: 55%;
+        left: 30px;
+      }
+      .circle-bottom-right {
+        width: 350px;
+        height: 350px;
+        bottom: -175px;
+        right: -100px;
+      }
+      .circle-middle-right {
+        width: 180px;
+        height: 180px;
+        top: 40%;
+        right: -50px;
+      }
+      .circle-small {
+        width: 90px;
+        height: 90px;
+        top: 80px;
+        left: 180px;
+      }
+      .circle-bottom-left {
+        width: 200px;
+        height: 200px;
+        bottom: -100px;
+        left: -50px;
+      } /* Cover Slide */
+      .cover-slide {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 80px 100px;
+      }
+      .logo-container {
+        position: absolute;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+      }
+      .logo {
+        width: 280px;
+        height: auto;
+        display: block;
+      }
+      .badge {
+        background: #c8102e;
+        color: #fff;
+        padding: 12px 45px;
+        border-radius: 50px;
+        font-size: 20px;
+        font-weight: 700;
+        display: inline-block;
+        margin-bottom: 50px;
+        margin-top: 200px;
+        z-index: 10;
+        position: relative;
+      }
+      .title {
+        font-family: "Bebas
+      Neue", Arial, sans-serif;
+        font-size: 90px;
+        font-weight: 400;
+        color: #c8102e;
+        line-height: 1.1;
+        margin-bottom: 60px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        z-index: 10;
+        position: relative;
+      }
+      .subtitle {
+        font-size: 36px;
+        font-weight: 400;
+        margin-bottom: 15px;
+        color: #fff;
+        z-index: 10;
+        position: relative;
+      }
+      .instructor {
+        font-size: 32px;
+        font-weight: 400;
+        color: #ccc;
+        z-index: 10;
+        position: relative;
+      } /*
+      Participation Slide */
+      .participation-slide {
+        padding: 60px 80px;
+      }
+      .slide-header {
+        margin-bottom: 50px;
+        z-index: 10;
+        position: relative;
+      }
+      .slide-title {
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 64px;
+        font-weight: 400;
+        color: #c8102e;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+      }
+      .slide-subtitle {
+        font-size: 20px;
+        color: #999;
+        font-weight: 400;
+      }
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        z-index: 10;
+        position: relative;
+      }
+      .chart-container {
+        position: relative;
+      }
+      .bar-chart {
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 20px;
+        padding: 40px;
+        border: 2px solid #333;
+        height: 450px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .chart-with-axis {
+        display: flex;
+        height: 320px;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .y-axis {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-right: 10px;
+        min-width: 50px;
+      }
+      .y-label {
+        font-size: 14px;
+        color: #999;
+        text-align: right;
+        font-weight: 400;
+        line-height: 1;
+      }
+      .chart-area {
+        flex: 1;
+        position: relative;
+        border-left: 2px solid #333;
+        border-bottom: 2px solid #333;
+      }
+      .grid-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+      }
+      .bar-wrapper {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+      }
+      .bar {
+        width: 180px;
+        background: linear-gradient(180deg, #c8102e 0%, #8b0a1f 100%);
+        border-radius: 12px 12px 0 0;
+        position: relative;
+        box-shadow: 0 -8px 25px rgba(200, 16, 46, 0.4);
+        transition: height 0.3s ease;
+      }
+      .bar-label {
+        position: absolute;
+        top: -45px;
+        width: 100%;
+        text-align: center;
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 48px;
+        font-weight: 400;
+        color: #c8102e;
+        letter-spacing: 1px;
+      }
+      .bar-base {
+        text-align: center;
+        font-size: 16px;
+        color: #999;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-top: 10px;
+      }
+      .stats-container {
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 20px;
+        padding: 50px;
+        border: 2px solid #333;
+        height: 450px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .stat-card {
+        margin-bottom: 40px;
+      }
+      .stat-card:last-child {
+        margin-bottom: 0;
+      }
+      .stat-label {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+      }
+      .stat-value {
+        font-family: "Bebas
+      Neue", Arial, sans-serif;
+        font-size: 72px;
+        font-weight: 400;
+        color: #c8102e;
+        margin-bottom: 12px;
+        line-height: 1;
+        letter-spacing: 1px;
+      }
+      .stat-description {
+        font-size: 16px;
+        color: #ccc;
+        line-height: 1.5;
+        font-weight: 400;
+      }
+      .divider {
+        height: 2px;
+        background: linear-gradient(90deg, #c8102e 0%, transparent 100%);
+        margin: 40px 0;
+      }
+      /* Profile Slides */
+      .profile-slide {
+        padding: 60px 80px;
+      }
+      .profile-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        z-index: 10;
+        position: relative;
+      }
+      .profile-section {
+        background: rgba(26, 26, 26, 0.95);
+        border: 2px solid #333;
+        border-radius: 20px;
+        padding: 50px;
+        height: 450px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      .section-title {
+        font-family: "Bebas Neue", Arial, sans-serif;
+        font-size: 32px;
+        font-weight: 400;
+        color: #c8102e;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+      .simple-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .simple-table td {
+        padding: 15px 0;
+        border-bottom: 1px solid #333;
+        font-size: 14px;
+        line-height: 1.5;
+        vertical-align: top;
+      }
+      .simple-table td:first-child {
+        color: #999;
+        font-weight: 600;
+        width: 40%;
+        padding-right: 20px;
+      }
+      .simple-table td:last-child {
+        color: #fff;
+        font-weight: 400;
+      }
+      .simple-table tr:last-child td {
+        border-bottom: none;
+      }
+      .data-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .data-item {
+        display: block;
+        line-height: 1.4;
+      }
+      @media print {
+        .slide {
+          page-break-after: always;
+        }
+        @page {
+          size: landscape;
+          margin: 0;
+        }
+      }
     </style>
   </head>
   <body>
@@ -101,12 +402,31 @@
       </div>
 
       <div class="content-grid">
-        <!-- Bar Chart -->
+        <!-- Bar Chart with Y-Axis -->
         <div class="chart-container">
           <div class="bar-chart">
-            <div class="bar-wrapper">
-              <div class="bar" style="height: {{completionPercentage}}%;">
-                <div class="bar-label">{{completionPercentage}}%</div>
+            <div class="chart-with-axis">
+              <!-- Y-Axis -->
+              <div class="y-axis">
+                <div class="y-label">100%</div>
+                <div class="y-label">75%</div>
+                <div class="y-label">50%</div>
+                <div class="y-label">25%</div>
+                <div class="y-label">0%</div>
+              </div>
+              <!-- Chart Area -->
+              <div class="chart-area">
+                <!-- Grid lines -->
+                <div class="grid-line" style="bottom: 75%;"></div>
+                <div class="grid-line" style="bottom: 50%;"></div>
+                <div class="grid-line" style="bottom: 25%;"></div>
+                <div class="grid-line" style="bottom: 0%;"></div>
+                <!-- Bar -->
+                <div class="bar-wrapper">
+                  <div class="bar" style="height: {{completionPercentage}}%;">
+                    <div class="bar-label">{{completionPercentage}}%</div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="bar-base">Completion Rate</div>
@@ -132,6 +452,406 @@
             <div class="stat-description">registered students completed the
               entry and goal-setting forms</div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: DEMOGRAPHICS -->
+    <div class="slide profile-slide">
+      <div class="circle circle-top-right"></div>
+      <div class="circle circle-middle-right"></div>
+      <div class="circle circle-bottom-left"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Demographics</h2>
+      </div>
+
+      <div class="profile-container">
+        <!-- Left Section -->
+        <div class="profile-section">
+          <h3 class="section-title">Student Profile</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>Classification</td>
+                <td>
+                  <div class="data-list">
+                    {{#each demographics.classification}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Gender</td>
+                <td>
+                  <div class="data-list">
+                    {{#each demographics.gender}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Ethnicity</td>
+                <td>
+                  <div class="data-list">
+                    {{#each demographics.ethnicity}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Right Section -->
+        <div class="profile-section">
+          <h3 class="section-title">Additional Demographics</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>Minor(s)</td>
+                <td>
+                  <div class="data-list">
+                    {{#each demographics.minors}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>First Generation</td>
+                <td>
+                  <div class="data-list">
+                    {{#each demographics.firstGeneration}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>International Student</td>
+                <td>
+                  <div class="data-list">
+                    {{#each demographics.international}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: GENERAL PROFILE -->
+    <div class="slide profile-slide">
+      <div class="circle circle-top-left"></div>
+      <div class="circle circle-middle-right"></div>
+      <div class="circle circle-bottom-right"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">General Profile</h2>
+      </div>
+
+      <div class="profile-container">
+        <div class="profile-section" style="height: 550px;">
+          <h3 class="section-title">Student Information</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>Graduation Year</td>
+                <td>
+                  <div class="data-list">
+                    {{#each generalProfile.graduationYear}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Major(s)</td>
+                <td>
+                  <div class="data-list">
+                    {{#each generalProfile.majors}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Minor(s)</td>
+                <td>
+                  <div class="data-list">
+                    {{#each generalProfile.minors}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="profile-section">
+          <h3 class="section-title">Student Status</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>First Generation</td>
+                <td>
+                  <div class="data-list">
+                    {{#each generalProfile.firstGeneration}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>International Student</td>
+                <td>
+                  <div class="data-list">
+                    {{#each generalProfile.international}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: ACADEMIC PROFILE -->
+    <div class="slide profile-slide">
+      <div class="circle circle-top-right"></div>
+      <div class="circle circle-bottom-left"></div>
+      <div class="circle circle-middle-left"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Academic Profile</h2>
+      </div>
+
+      <div class="profile-container">
+        <div class="profile-section">
+          <h3 class="section-title">Academic Information</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>GPA Range</td>
+                <td>
+                  <div class="data-list">
+                    {{#each academicProfile.gpa}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Credit Hours</td>
+                <td>
+                  <div class="data-list">
+                    {{#each academicProfile.creditHours}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="profile-section">
+          <h3 class="section-title">Additional Details</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>Research Experience</td>
+                <td>
+                  <div class="data-list">
+                    {{#each academicProfile.research}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Internship Experience</td>
+                <td>
+                  <div class="data-list">
+                    {{#each academicProfile.internship}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: LEADERSHIP PROFILE -->
+    <div class="slide profile-slide">
+      <div class="circle circle-top-left"></div>
+      <div class="circle circle-middle-right"></div>
+      <div class="circle circle-bottom-right"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Leadership Profile</h2>
+      </div>
+
+      <div class="profile-container">
+        <div class="profile-section">
+          <h3 class="section-title">Leadership Experience</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>Campus Organizations</td>
+                <td>
+                  <div class="data-list">
+                    {{#each leadershipProfile.organizations}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Leadership Positions</td>
+                <td>
+                  <div class="data-list">
+                    {{#each leadershipProfile.positions}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="profile-section">
+          <h3 class="section-title">Community Involvement</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>Volunteer Hours</td>
+                <td>
+                  <div class="data-list">
+                    {{#each leadershipProfile.volunteerHours}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Service Projects</td>
+                <td>
+                  <div class="data-list">
+                    {{#each leadershipProfile.serviceProjects}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: RESEARCH PROFILE -->
+    <div class="slide profile-slide">
+      <div class="circle circle-top-right"></div>
+      <div class="circle circle-bottom-left"></div>
+      <div class="circle circle-middle-left"></div>
+
+      <div class="slide-header">
+        <h2 class="slide-title">Research Profile</h2>
+      </div>
+
+      <div class="profile-container">
+        <div class="profile-section">
+          <h3 class="section-title">Research Experience</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>Research Projects</td>
+                <td>
+                  <div class="data-list">
+                    {{#each researchProfile.projects}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Publications</td>
+                <td>
+                  <div class="data-list">
+                    {{#each researchProfile.publications}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="profile-section">
+          <h3 class="section-title">Conference Participation</h3>
+          <table class="simple-table">
+            <tbody>
+              <tr>
+                <td>Presentations</td>
+                <td>
+                  <div class="data-list">
+                    {{#each researchProfile.presentations}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Poster Sessions</td>
+                <td>
+                  <div class="data-list">
+                    {{#each researchProfile.posters}}
+                      <span class="data-item">{{this.percentage}}%
+                        {{this.label}}</span>
+                    {{/each}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

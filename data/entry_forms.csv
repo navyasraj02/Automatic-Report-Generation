@@ -1,6 +1,25 @@
-name,email,experience,role,department
-John Doe,john@example.com,AI,Developer,Engineering
-Jane Smith,jane@example.com,Pharis Fellowship,Manager,Operations
-Michael Brown,michael@example.com,AI,Data Scientist,Research
-Sarah Wilson,sarah@example.com,Pharis Fellowship,Team Lead,Marketing
-David Lee,david@example.com,AI,Software Engineer,Engineering
+Timestamp,Email,First Name,Last Name,Experience,Classification,Major,Minor,Graduation Date,Gender,Ethnicity,First Generation,International Student
+2024-01-10 09:00:00,student1@uh.edu,John,Doe,HON 3397,Junior,Computer Science,Data Science,May 2025,Male,Asian,No,No
+2024-01-10 09:15:00,student2@uh.edu,Jane,Smith,HON 3397,Senior,Mathematics,Business,May 2024,Female,White,No,No
+2024-01-10 09:30:00,student3@uh.edu,Michael,Johnson,HON 3397,Sophomore,Engineering,Data Science,May 2026,Male,Black or African American,Yes,No
+2024-01-10 09:45:00,student4@uh.edu,Emily,Williams,HON 3397,Junior,Biology,Data Science,May 2025,Female,Hispanic or Latino,No,No
+2024-01-10 10:00:00,student5@uh.edu,David,Brown,HON 3397,Senior,Business,Data Science,December 2024,Male,White,No,No
+2024-01-10 10:15:00,student6@uh.edu,Sarah,Davis,HON 3397,Junior,Psychology,Data Science,May 2025,Female,Asian,No,Yes
+2024-01-10 10:30:00,student7@uh.edu,James,Miller,HON 3397,Sophomore,Computer Science,,May 2026,Male,White,No,No
+2024-01-10 10:45:00,student8@uh.edu,Lisa,Wilson,HON 3397,Senior,Data Science,,May 2024,Female,Two or more races,Yes,No
+2024-01-10 11:00:00,student9@uh.edu,Robert,Moore,HON 3397,Junior,Mathematics,Statistics,May 2025,Male,Hispanic or Latino,No,No
+2024-01-10 11:15:00,student10@uh.edu,Maria,Taylor,HON 3397,Senior,Sociology,Data Science,December 2024,Female,Hispanic or Latino,Yes,No
+2024-01-10 11:30:00,student11@uh.edu,William,Anderson,HON 3397,Junior,Computer Science,Data Science,May 2025,Male,White,No,No
+2024-01-10 11:45:00,student12@uh.edu,Jennifer,Thomas,HON 3397,Sophomore,Biology,,May 2026,Female,Asian,No,No
+2024-01-10 12:00:00,student13@uh.edu,Christopher,Jackson,HON 3397,Senior,Data Science,,May 2024,Male,Black or African American,No,No
+2024-01-10 12:15:00,student14@uh.edu,Amanda,White,HON 3397,Junior,Engineering,Data Science,May 2025,Female,White,No,No
+2024-01-10 12:30:00,student15@uh.edu,Daniel,Martinez,HON 3397,Senior,Mathematics,Business,December 2024,Male,Hispanic or Latino,Yes,No
+2024-01-10 12:45:00,student16@uh.edu,Jessica,Garcia,HON 3397,Junior,Computer Science,Data Science,May 2025,Female,Hispanic or Latino,No,No
+2024-01-10 13:00:00,student17@uh.edu,Matthew,Rodriguez,HON 3397,Sophomore,Business,,May 2026,Male,Hispanic or Latino,Yes,No
+2024-01-10 13:15:00,student18@uh.edu,Ashley,Lee,HON 3397,Senior,Psychology,Data Science,May 2024,Female,Asian,No,Yes
+2024-01-10 13:30:00,student19@uh.edu,Joshua,Harris,HON 3397,Junior,Engineering,,May 2025,Male,White,No,No
+2024-01-10 13:45:00,student20@uh.edu,Michelle,Clark,HON 3397,Senior,Data Science,,December 2024,Female,Two or more races,No,No
+2024-01-10 14:00:00,student21@uh.edu,Andrew,Lewis,HON 3397,Sophomore,Computer Science,,May 2026,Male,White,No,No
+2024-01-10 14:15:00,student22@uh.edu,Stephanie,Walker,HON 3397,Junior,Mathematics,Statistics,May 2025,Female,Black or African American,Yes,No
+2024-01-10 14:30:00,student23@uh.edu,Ryan,Hall,HON 3397,Senior,Biology,Data Science,May 2024,Male,White,No,No
+2024-01-10 14:45:00,student24@uh.edu,Lauren,Allen,HON 3397,Junior,Sociology,Data Science,May 2025,Female,Asian,No,No
