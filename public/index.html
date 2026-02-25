@@ -284,9 +284,30 @@
           <h2>Generate Report</h2>
 
           <div class="form-group">
+            <label for="session">Select Session</label>
+            <select id="session">
+              <option value="">Loading sessions...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
             <label for="experience">Select Experience</label>
             <select id="experience">
-              <option value="">Loading experiences...</option>
+              <option value="">Select a session first...</option>
+            </select>
+          </div>
+
+          <!-- Removed semester selection; session now represents the term -->
+
+          <div class="form-group">
+            <label for="instructorName">Select Instructor</label>
+            <select id="instructorName">
+              <option value="">Choose instructor...</option>
+              <option value="Dr. Ioannis Konstantinidis">
+                Dr. Ioannis Konstantinidis
+              </option>
+              <option value="Dr. Jane Doe">Dr. Jane Doe</option>
+              <option value="Dr. John Smith">Dr. John Smith</option>
             </select>
           </div>
 
@@ -313,41 +334,110 @@
     </div>
 
     <script>
-      // Load experiences on page load
+      // Load sessions on page load, then experiences when a session is selected
       window.addEventListener("load", async () => {
         try {
-          const response = await fetch("/api/experiences");
-          const data = await response.json();
-          const select = document.getElementById("experience");
+          const sessionResponse = await fetch("/api/sessions");
+          const sessionData = await sessionResponse.json();
+          const sessionSelect = document.getElementById("session");
 
-          if (data.experiences && data.experiences.length > 0) {
-            select.innerHTML =
-              '<option value="">Select an experience...</option>';
-            data.experiences.forEach((exp) => {
+          if (sessionData.sessions && sessionData.sessions.length > 0) {
+            sessionSelect.innerHTML =
+              '<option value="">Select a session...</option>';
+            sessionData.sessions.forEach((s) => {
               const option = document.createElement("option");
-              option.value = exp;
-              option.textContent = exp;
-              select.appendChild(option);
+              option.value = s.id;
+              option.textContent = s.name;
+              sessionSelect.appendChild(option);
             });
           } else {
-            select.innerHTML = '<option value="">No experiences found</option>';
+            sessionSelect.innerHTML =
+              '<option value="">No sessions found</option>';
           }
+
+          // When session changes, load experiences for that session
+          sessionSelect.addEventListener("change", async () => {
+            const sessionId = sessionSelect.value;
+            const experienceSelect = document.getElementById("experience");
+
+            if (!sessionId) {
+              experienceSelect.innerHTML =
+                '<option value="">Select a session first...</option>';
+              return;
+            }
+
+            try {
+              const expResponse = await fetch(
+                `/api/experiences?sessionId=${encodeURIComponent(sessionId)}`,
+              );
+              const expData = await expResponse.json();
+
+              if (expData.experiences && expData.experiences.length > 0) {
+                experienceSelect.innerHTML =
+                  '<option value="">Select an experience...</option>';
+                expData.experiences.forEach((exp) => {
+                  const option = document.createElement("option");
+                  if (typeof exp === "string") {
+                    option.value = exp;
+                    option.textContent = exp;
+                  } else {
+                    option.value = exp.id;
+                    option.textContent = exp.label;
+                    option.dataset.label = exp.label;
+                  }
+                  experienceSelect.appendChild(option);
+                });
+              } else {
+                experienceSelect.innerHTML =
+                  '<option value="">No experiences found</option>';
+              }
+            } catch (error) {
+              console.error("Error loading experiences:", error);
+              experienceSelect.innerHTML =
+                '<option value="">Error loading experiences</option>';
+            }
+          });
         } catch (error) {
-          console.error("Error loading experiences:", error);
-          document.getElementById("experience").innerHTML =
-            '<option value="">Error loading experiences</option>';
+          console.error("Error loading sessions:", error);
+          document.getElementById("session").innerHTML =
+            '<option value="">Error loading sessions</option>';
         }
       });
 
       async function generateReport() {
-        const experience = document.getElementById("experience").value;
+        const sessionSelect = document.getElementById("session");
+        const sessionId = sessionSelect.value;
+        const sessionLabel =
+          sessionSelect.options[sessionSelect.selectedIndex]?.textContent || "";
+        const experienceSelect = document.getElementById("experience");
+        const experience = experienceSelect.value;
+        const experienceLabel =
+          experienceSelect.options[experienceSelect.selectedIndex]?.dataset
+            ?.label ||
+          experienceSelect.options[experienceSelect.selectedIndex]?.textContent ||
+          "";
+        const instructorName =
+          document.getElementById("instructorName").value;
         const reportType = document.getElementById("reportType").value;
         const messageDiv = document.getElementById("message");
         const generateBtn = document.getElementById("generateBtn");
 
         // Validation
+        if (!sessionId) {
+          messageDiv.textContent = "Please select a session first.";
+          messageDiv.className = "error";
+          messageDiv.style.display = "block";
+          return;
+        }
         if (!experience) {
           messageDiv.textContent = "Please select an experience first.";
+          messageDiv.className = "error";
+          messageDiv.style.display = "block";
+          return;
+        }
+
+        if (!instructorName) {
+          messageDiv.textContent = "Please select an instructor.";
           messageDiv.className = "error";
           messageDiv.style.display = "block";
           return;
@@ -375,7 +465,14 @@
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ reportType, experience }),
+            body: JSON.stringify({
+              reportType,
+              sessionId,
+              sessionLabel,
+              experienceId: experience,
+              experienceLabel,
+              instructorName,
+            }),
           });
 
           if (response.ok) {
@@ -383,7 +480,15 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `${reportType}_${experience}_${Date.now()}.pdf`;
+            const safeSession = String(sessionLabel || sessionId || "session")
+              .replace(/[^\w\-]+/g, "-")
+              .toLowerCase();
+            const safeExperience = String(
+              experienceLabel || experience || "experience",
+            )
+              .replace(/[^\w\-]+/g, "-")
+              .toLowerCase();
+            a.download = `${reportType}_${safeSession}_${safeExperience}.pdf`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);

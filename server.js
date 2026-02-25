@@ -4,9 +4,18 @@ const csv = require("csv-parser");
 const handlebars = require("handlebars");
 const puppeteer = require("puppeteer");
 const path = require("path");
+const { MongoClient } = require("mongodb");
+
+// Load .env in local dev (optional)
+try {
+  // eslint-disable-next-line global-require
+  require("dotenv").config();
+} catch {
+  // dotenv is optional; ignore if not installed
+}
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 app.use(express.json());
 app.use(express.static("public"));
@@ -14,6 +23,33 @@ app.use(express.static("public"));
 // Ensure generated_reports directory exists
 if (!fs.existsSync("./generated_reports")) {
   fs.mkdirSync("./generated_reports");
+}
+
+function getMongoDbName() {
+  return process.env.MONGODB_DB_NAME || undefined;
+}
+
+let mongoClient;
+let mongoClientPromise;
+
+async function getMongoDb() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error(
+      "Missing MONGODB_URI. Set MONGODB_URI (and optionally MONGODB_DB_NAME).",
+    );
+  }
+
+  if (!mongoClientPromise) {
+    mongoClient = new MongoClient(uri, {
+      // Sensible defaults; topology engine is automatic in modern driver
+      maxPoolSize: 10,
+    });
+    mongoClientPromise = mongoClient.connect();
+  }
+
+  const client = await mongoClientPromise;
+  return client.db(getMongoDbName());
 }
 
 // Helper function to convert image to base64
@@ -55,28 +91,191 @@ function normalizeEmail(email) {
   return email.toLowerCase().trim();
 }
 
-// Get available experiences
-app.get("/api/experiences", async (req, res) => {
+// Get available sessions (from sessionData)
+app.get("/api/sessions", async (req, res) => {
   try {
-    const goalData = await readCSV("./data/goal_setting.csv");
-    const experiences = [
-      ...new Set(goalData.map((row) => row.Experience)),
-    ].filter(Boolean);
-    res.json({ experiences });
+    if (!process.env.MONGODB_URI) {
+      return res
+        .status(500)
+        .json({ error: "MongoDB is not configured for sessions." });
+    }
+
+    const db = await getMongoDb();
+    const sessionCollection = db.collection("sessionData");
+
+    // Prefer active sessions; if none, fall back to all
+    let sessions = await sessionCollection
+      .find({ sessionStatus: true })
+      .project({ _id: 1, sessionName: 1 })
+      .toArray();
+
+    if (!sessions.length) {
+      sessions = await sessionCollection
+        .find({})
+        .project({ _id: 1, sessionName: 1 })
+        .toArray();
+    }
+
+    const result = sessions
+      .map((doc) => ({
+        id: String(doc._id),
+        name: doc.sessionName || String(doc._id),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    return res.json({ sessions: result });
   } catch (error) {
-    res.status(500).json({ error: "Failed to load experiences" });
+    return res.status(500).json({
+      error: "Failed to load sessions",
+      details: error.message,
+    });
   }
 });
 
+// Get available experiences for a specific session
+app.get("/api/experiences", async (req, res) => {
+  try {
+    if (!process.env.MONGODB_URI) {
+      return res
+        .status(500)
+        .json({ error: "MongoDB is not configured for experiences." });
+    }
+
+    const { sessionId } = req.query;
+
+    if (!sessionId) {
+      return res.status(400).json({ error: "sessionId query parameter is required" });
+    }
+
+    const db = await getMongoDb();
+    const expInstanceCollection = db.collection("expInstanceData");
+
+    // Active experiences for this session
+    const instances = await expInstanceCollection
+      .find({ sessionID: sessionId, expInstanceStatus: true })
+      .project({ _id: 1, experience: 1 })
+      .toArray();
+
+    const experiences = instances
+      .map((doc) => {
+        const expObj = doc.experience || {};
+        const id = expObj.id ? String(expObj.id) : String(doc._id);
+        const name =
+          expObj.name === undefined || expObj.name === null
+            ? ""
+            : String(expObj.name).trim();
+        const category =
+          expObj.category === undefined || expObj.category === null
+            ? ""
+            : String(expObj.category).trim();
+        const label = `${name} ${category}`.replace(/\s+/g, " ").trim();
+        if (!label) return null;
+        return { id, label };
+      })
+      .filter(Boolean);
+
+    // De‑duplicate by id and sort by label
+    const uniqueById = new Map();
+    experiences.forEach((exp) => {
+      if (!uniqueById.has(exp.id)) {
+        uniqueById.set(exp.id, exp);
+      }
+    });
+
+    const sorted = Array.from(uniqueById.values()).sort((a, b) =>
+      a.label.localeCompare(b.label),
+    );
+
+    return res.json({ experiences });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Failed to load experiences",
+      details: error.message,
+    });
+  }
+});
+
+// Helper function to safely access nested object properties
+function getNestedValue(obj, path) {
+  if (!obj || !path) return undefined;
+  const parts = path.split(".");
+  let current = obj;
+  for (const part of parts) {
+    if (current === null || current === undefined) return undefined;
+    current = current[part];
+  }
+  return current;
+}
+
 // Helper function to calculate distribution percentages
+// Supports both flat fields (e.g., "field") and nested paths (e.g., "studentInformation.enrolledUHInfo.majors")
 function calculateDistribution(data, field) {
   const counts = {};
   let total = 0;
 
   data.forEach((row) => {
-    const value = row[field];
-    if (value && value.trim() !== "") {
+    const raw = getNestedValue(row, field);
+    const value =
+      raw === undefined || raw === null ? "" : String(raw).trim();
+    if (value !== "") {
       counts[value] = (counts[value] || 0) + 1;
+      total++;
+    }
+  });
+
+  return Object.entries(counts)
+    .map(([key, count]) => ({
+      label: key,
+      count: count,
+      percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+    }))
+    .sort((a, b) => b.percentage - a.percentage);
+}
+
+// Helper function to calculate distribution for array fields (e.g., majors array)
+function calculateDistributionFromArray(data, field) {
+  const counts = {};
+  let total = 0;
+
+  data.forEach((row) => {
+    const raw = getNestedValue(row, field);
+    if (Array.isArray(raw)) {
+      raw.forEach((item) => {
+        const value =
+          item === undefined || item === null ? "" : String(item).trim();
+        if (value !== "") {
+          counts[value] = (counts[value] || 0) + 1;
+          total++;
+        }
+      });
+    } else if (raw !== undefined && raw !== null) {
+      const value = String(raw).trim();
+      if (value !== "") {
+        counts[value] = (counts[value] || 0) + 1;
+        total++;
+      }
+    }
+  });
+
+  return Object.entries(counts)
+    .map(([key, count]) => ({
+      label: key,
+      count: count,
+      percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+    }))
+    .sort((a, b) => b.percentage - a.percentage);
+}
+
+// Helper function to calculate boolean distribution
+function calculateBooleanDistribution(data, field, trueLabel = "Yes", falseLabel = "No") {
+  const counts = { [trueLabel]: 0, [falseLabel]: 0 };
+  let total = 0;
+
+  data.forEach((row) => {
+    const raw = getNestedValue(row, field);
+    if (raw !== undefined && raw !== null) {
+      const value = Boolean(raw);
+      counts[value ? trueLabel : falseLabel]++;
       total++;
     }
   });
@@ -123,23 +322,40 @@ function calculateGrowthData(goalData, exitData, expectedField, achievedField) {
 // Generate report endpoint
 app.post("/api/generate-report", async (req, res) => {
   try {
-    const { reportType, experience } = req.body;
+    const {
+      reportType,
+      sessionId,
+      sessionLabel,
+      experienceId,
+      experienceLabel,
+      instructorName,
+    } = req.body;
 
-    // Read all CSV files
-    const goalData = await readCSV("./data/goal_setting.csv");
-    const entryData = await readCSV("./data/entry_forms.csv");
-    const exitData = await readCSV("./data/exit_forms.csv");
+    const sessionValue =
+      sessionId === undefined || sessionId === null
+        ? ""
+        : String(sessionId).trim();
+    const sessionDisplay =
+      sessionLabel === undefined || sessionLabel === null
+        ? sessionValue
+        : String(sessionLabel).trim() || sessionValue;
 
-    // Filter data by experience
-    const filteredGoals = goalData.filter(
-      (row) => row.Experience === experience,
-    );
-    const filteredEntry = entryData.filter(
-      (row) => row.Experience === experience,
-    );
-    const filteredExit = exitData.filter(
-      (row) => row.Experience === experience,
-    );
+    const experienceValue =
+      experienceId === undefined || experienceId === null
+        ? ""
+        : String(experienceId).trim();
+    const experienceDisplay =
+      experienceLabel === undefined || experienceLabel === null
+        ? experienceValue
+        : String(experienceLabel).trim() || experienceValue;
+
+    if (!sessionValue) {
+      return res.status(400).json({ error: "session is required" });
+    }
+
+    if (!experienceValue) {
+      return res.status(400).json({ error: "experience is required" });
+    }
 
     // Convert logo to base64
     const logoPath = path.join(__dirname, "assets", "logo.jfif");
@@ -150,22 +366,105 @@ app.post("/api/generate-report", async (req, res) => {
     if (reportType === "profile") {
       // ============= PROFILE REPORT DATA =============
 
-      // Total students registered (filled entry form)
-      const totalRegistered = filteredEntry.length;
+      const db = await getMongoDb();
+      const goalCollection = db.collection("goalSettingFormData");
+      const entryCollection = db.collection("studentEntryFormData");
 
-      // Create sets of normalized emails for comparison
-      const entryEmails = new Set(
-        filteredEntry.map((row) => normalizeEmail(row.Email)).filter(Boolean),
-      );
+      const goalPipeline = [
+        { $match: { completed: true } },
+        {
+          $lookup: {
+            from: "expRegistrationData",
+            localField: "expRegistrationID",
+            foreignField: "_id",
+            as: "reg",
+          },
+        },
+        { $unwind: "$reg" },
+        {
+          $lookup: {
+            from: "expInstanceData",
+            localField: "reg.expInstanceID",
+            foreignField: "_id",
+            as: "inst",
+          },
+        },
+        { $unwind: "$inst" },
+        {
+          $lookup: {
+            from: "sessionData",
+            localField: "inst.sessionID",
+            foreignField: "_id",
+            as: "sess",
+          },
+        },
+        { $unwind: "$sess" },
+        {
+          $match: {
+            "sess._id": sessionValue,
+            "sess.sessionName": sessionDisplay,
+            "inst.experience.id": experienceValue,
+            "inst.expInstanceStatus": true,
+          },
+        },
+        { $count: "count" },
+      ];
 
-      const goalEmails = new Set(
-        filteredGoals.map((row) => normalizeEmail(row.Email)).filter(Boolean),
-      );
+      const registeredPipeline = [
+        { $match: { completed: true } },
+        {
+          $lookup: {
+            from: "expRegistrationData",
+            localField: "organizationID",
+            foreignField: "_id",
+            as: "reg",
+          },
+        },
+        { $unwind: "$reg" },
+        {
+          $lookup: {
+            from: "expInstanceData",
+            localField: "reg.expInstanceID",
+            foreignField: "_id",
+            as: "inst",
+          },
+        },
+        { $unwind: "$inst" },
+        {
+          $lookup: {
+            from: "sessionData",
+            localField: "inst.sessionID",
+            foreignField: "_id",
+            as: "sess",
+          },
+        },
+        { $unwind: "$sess" },
+        {
+          $match: {
+            "sess._id": sessionValue,
+            "sess.sessionName": sessionDisplay,
+            "inst.experience.id": experienceValue,
+            "inst.expInstanceStatus": true,
+          },
+        },
+        { $count: "count" },
+      ];
 
-      // Find students who completed BOTH entry form AND goal-setting form
-      const completedStudents = [...entryEmails].filter((email) =>
-        goalEmails.has(email),
-      ).length;
+      const [goalAgg, registeredAgg, filteredGoals, filteredEntry] =
+        await Promise.all([
+          goalCollection.aggregate(goalPipeline).toArray(),
+          entryCollection.aggregate(registeredPipeline).toArray(),
+          goalCollection.find({ expRegistrationID: experienceValue }).toArray(),
+          entryCollection.find({ organizationID: experienceValue }).toArray(),
+        ]);
+
+      const completedStudents =
+        (goalAgg && goalAgg.length > 0 && goalAgg[0].count) || 0;
+      const totalRegistered =
+        (registeredAgg &&
+          registeredAgg.length > 0 &&
+          registeredAgg[0].count) ||
+        0;
 
       // Calculate completion percentage
       const completionPercentage =
@@ -174,34 +473,178 @@ app.post("/api/generate-report", async (req, res) => {
           : 0;
 
       // Calculate Demographics
+      // Note: Some fields (Classification, Gender, Ethnicity, First Generation, International)
+      // are not present in the provided schema, so they return empty distributions
       const demographics = {
-        classification: calculateDistribution(filteredEntry, "Classification"),
-        gender: calculateDistribution(filteredEntry, "Gender"),
-        ethnicity: calculateDistribution(filteredEntry, "Ethnicity"),
-        minors: calculateDistribution(filteredEntry, "Minor"),
-        firstGeneration: calculateDistribution(
-          filteredEntry,
-          "First Generation",
-        ),
-        international: calculateDistribution(
-          filteredEntry,
-          "International Student",
-        ),
+        classification: [], // Not in schema
+        gender: [], // Not in schema
+        ethnicity: [], // Not in schema
+        minors: (() => {
+          // Combine honorsMinors and otherMinors arrays
+          const allMinors = [];
+          filteredEntry.forEach((entry) => {
+            const honorsMinors = getNestedValue(
+              entry,
+              "studentInformation.enrolledUHInfo.honorsMinors",
+            );
+            const otherMinors = getNestedValue(
+              entry,
+              "studentInformation.enrolledUHInfo.otherMinors",
+            );
+            if (Array.isArray(honorsMinors)) {
+              allMinors.push(...honorsMinors);
+            }
+            if (Array.isArray(otherMinors)) {
+              allMinors.push(...otherMinors);
+            }
+            if (!Array.isArray(honorsMinors) && honorsMinors) {
+              allMinors.push(honorsMinors);
+            }
+            if (!Array.isArray(otherMinors) && otherMinors) {
+              allMinors.push(otherMinors);
+            }
+          });
+          const counts = {};
+          let total = 0;
+          allMinors.forEach((minor) => {
+            const value =
+              minor === undefined || minor === null
+                ? ""
+                : String(minor).trim();
+            if (value !== "") {
+              counts[value] = (counts[value] || 0) + 1;
+              total++;
+            }
+          });
+          return Object.entries(counts)
+            .map(([key, count]) => ({
+              label: key,
+              count: count,
+              percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+            }))
+            .sort((a, b) => b.percentage - a.percentage);
+        })(),
+        firstGeneration: [], // Not in schema
+        international: [], // Not in schema
       };
 
       // Calculate General Profile
       const generalProfile = {
-        graduationYear: calculateDistribution(filteredEntry, "Graduation Date"),
-        majors: calculateDistribution(filteredEntry, "Major"),
-        minors: calculateDistribution(filteredEntry, "Minor"),
-        firstGeneration: calculateDistribution(
+        graduationYear: calculateDistribution(
           filteredEntry,
-          "First Generation",
+          "studentInformation.enrolledUHInfo.expectedGraduationYear",
         ),
-        international: calculateDistribution(
+        majors: calculateDistributionFromArray(
           filteredEntry,
-          "International Student",
+          "studentInformation.enrolledUHInfo.majors",
         ),
+        minors: (() => {
+          // Combine honorsMinors and otherMinors arrays
+          const allMinors = [];
+          filteredEntry.forEach((entry) => {
+            const honorsMinors = getNestedValue(
+              entry,
+              "studentInformation.enrolledUHInfo.honorsMinors",
+            );
+            const otherMinors = getNestedValue(
+              entry,
+              "studentInformation.enrolledUHInfo.otherMinors",
+            );
+            if (Array.isArray(honorsMinors)) {
+              allMinors.push(...honorsMinors);
+            }
+            if (Array.isArray(otherMinors)) {
+              allMinors.push(...otherMinors);
+            }
+            if (!Array.isArray(honorsMinors) && honorsMinors) {
+              allMinors.push(honorsMinors);
+            }
+            if (!Array.isArray(otherMinors) && otherMinors) {
+              allMinors.push(otherMinors);
+            }
+          });
+          const counts = {};
+          let total = 0;
+          allMinors.forEach((minor) => {
+            const value =
+              minor === undefined || minor === null
+                ? ""
+                : String(minor).trim();
+            if (value !== "") {
+              counts[value] = (counts[value] || 0) + 1;
+              total++;
+            }
+          });
+          return Object.entries(counts)
+            .map(([key, count]) => ({
+              label: key,
+              count: count,
+              percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+            }))
+            .sort((a, b) => b.percentage - a.percentage);
+        })(),
+        firstGeneration: [], // Not in schema
+        international: [], // Not in schema
+        housing: calculateBooleanDistribution(
+          filteredEntry,
+          "studentInformation.enrolledUHInfo.livingOnCampus",
+          "On Campus",
+          "Off Campus",
+        ),
+        honorsCollegeAffiliation: calculateBooleanDistribution(
+          filteredEntry,
+          "studentInformation.enrolledUHInfo.honorsCollegeAffiliatedStatus",
+          "Yes",
+          "No",
+        ),
+        communityService: calculateBooleanDistribution(
+          filteredEntry,
+          "studentInformation.communityServiceInfo.serviceStatus",
+          "Yes",
+          "No",
+        ),
+        graduateSchoolInterest: (() => {
+          // Extract from programGradProType object (has id, label, checked)
+          const categories = { Masters: 0, PhD: 0, "MD/DO": 0, Other: 0 };
+          let total = 0;
+          filteredEntry.forEach((entry) => {
+            const gradType = getNestedValue(
+              entry,
+              "studentInformation.graduateProfessionalSchool.programGradProType",
+            );
+            if (gradType && typeof gradType === "object") {
+              const label =
+                gradType.label ||
+                gradType.id ||
+                (gradType.checked ? "Yes" : null);
+              if (label) {
+                const normalized = String(label).trim().toLowerCase();
+                if (normalized.includes("master")) {
+                  categories.Masters++;
+                } else if (normalized.includes("phd") || normalized.includes("ph.d")) {
+                  categories.PhD++;
+                } else if (
+                  normalized.includes("md") ||
+                  normalized.includes("do") ||
+                  normalized.includes("medical")
+                ) {
+                  categories["MD/DO"]++;
+                } else {
+                  categories.Other++;
+                }
+                total++;
+              }
+            }
+          });
+          return Object.entries(categories)
+            .map(([key, count]) => ({
+              label: key,
+              count: count,
+              percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+            }))
+            .filter((item) => item.count > 0 || total === 0)
+            .sort((a, b) => b.percentage - a.percentage);
+        })(),
       };
 
       // Academic Profile - with dummy data
@@ -280,7 +723,9 @@ app.post("/api/generate-report", async (req, res) => {
       };
 
       templateData = {
-        experience,
+        experience: experienceDisplay,
+        session: sessionDisplay,
+        instructorName,
         generatedDate: new Date().toLocaleDateString(),
         logoBase64,
         totalRegistered,
@@ -294,6 +739,27 @@ app.post("/api/generate-report", async (req, res) => {
       };
     } else {
       // ============= GROWTH REPORT DATA =============
+
+      // For now, growth report remains CSV-backed (existing behavior).
+      if (
+        !fs.existsSync("./data/goal_setting.csv") ||
+        !fs.existsSync("./data/entry_forms.csv") ||
+        !fs.existsSync("./data/exit_forms.csv")
+      ) {
+        return res.status(500).json({
+          error:
+            "Growth report data files are missing. Configure MongoDB for growth reports or restore the CSVs.",
+        });
+      }
+
+      const goalData = await readCSV("./data/goal_setting.csv");
+      const entryData = await readCSV("./data/entry_forms.csv");
+      const exitData = await readCSV("./data/exit_forms.csv");
+
+      const filteredGoals = goalData.filter((row) => row.Experience === experienceValue);
+      const filteredEntry = entryData.filter((row) => row.Experience === experienceValue);
+      const filteredExit = exitData.filter((row) => row.Experience === experienceValue);
+
       const totalRegistered = filteredEntry.length;
       const goalSettingCompleted = filteredGoals.length;
       const exitFormCompleted = filteredExit.length;
@@ -491,7 +957,7 @@ app.post("/api/generate-report", async (req, res) => {
         .filter((val) => val && val.trim());
 
       templateData = {
-        experience,
+        experience: experienceValue,
         generatedDate: new Date().toLocaleDateString(),
         logoBase64,
         totalRegistered,
@@ -532,7 +998,13 @@ app.post("/api/generate-report", async (req, res) => {
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
 
-    const fileName = `${reportType}_${experience}_${Date.now()}.pdf`;
+    const safeSession = (sessionDisplay || sessionValue || "session")
+      .replace(/[^\w\-]+/g, "-")
+      .toLowerCase();
+    const safeExperience = (experienceDisplay || experienceValue || "experience")
+      .replace(/[^\w\-]+/g, "-")
+      .toLowerCase();
+    const fileName = `${reportType}_${safeSession}_${safeExperience}.pdf`;
     const filePath = path.join(__dirname, "generated_reports", fileName);
 
     await page.pdf({

@@ -387,8 +387,8 @@
 
       <h1 class="title">{{experience}}</h1>
 
-      <p class="subtitle">Fall 2024</p>
-      <p class="instructor">Instructor: Dr. Ioannis Konstantinidis</p>
+      <p class="subtitle">{{session}}</p>
+      <p class="instructor">Instructor: {{instructorName}}</p>
     </div>
 
     <!-- SLIDE 2: PARTICIPATION -->
@@ -438,19 +438,21 @@
           <div class="stat-card">
             <div class="stat-label">Completion Rate</div>
             <div class="stat-value">{{completionPercentage}}%</div>
-            <div class="stat-description">of registered students completed the
-              forms</div>
+            <div class="stat-description">
+              of registered students completed the goal-setting form
+            </div>
           </div>
 
           <div class="divider"></div>
 
           <div class="stat-card">
             <div class="stat-label">Students Completed</div>
-            <div
-              class="stat-value"
-            >{{completedStudents}}/{{totalRegistered}}</div>
-            <div class="stat-description">registered students completed the
-              entry and goal-setting forms</div>
+            <div class="stat-value">
+              {{completedStudents}}/{{totalRegistered}}
+            </div>
+            <div class="stat-description">
+              registered students completed the goal-setting form
+            </div>
           </div>
         </div>
       </div>
